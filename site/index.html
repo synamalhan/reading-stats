@@ -406,22 +406,23 @@ function bookPage(data, b) {
 fetch("data.json", { cache: "no-store" }).then((r) => r.json()).then((data) => {
   pickColors(data.books);
   let shown = "";
-  const render = (keepScroll) => {
+  const render = (keepScroll, force) => {
     const section = location.hash && !location.hash.startsWith("#/") ? location.hash.slice(1) : "";  // tab links like #habits
     const k = section ? "" : decodeURIComponent(location.hash.replace(/^#\/?/, "")), b = data.books.find((x) => x.key === k);
-    if (section && shown === "home") return $(`#${CSS.escape(section)}`)?.scrollIntoView();
+    if (section && shown === "home" && !force) return $(`#${CSS.escape(section)}`)?.scrollIntoView();
     document.title = b ? `${b.title} ♡ Syna's Reading Paradise` : "Syna's Reading Paradise";
     $("#app").innerHTML = b ? bookPage(data, b) : home(data);
     shown = b ? "book" : "home";
     const y = $(".year"); if (y) y.scrollLeft = y.scrollWidth;  // open the year grid on recent months
+    if (keepScroll) return;
     if (section) $(`#${CSS.escape(section)}`)?.scrollIntoView();
-    else if (!keepScroll) scrollTo(0, 0);
+    else scrollTo(0, 0);
   };
   $("#app").addEventListener("click", (e) => {
     const v = e.target.closest("[data-view]")?.dataset.view;
     if (!v || v === VIEW) return;
     VIEW = v; try { localStorage.setItem("view", v); } catch {}
-    render(true); $(`[data-view="${v}"]`).focus();
+    render(true, true); $(`[data-view="${v}"]`).focus();  // redraw even when a #section link is in the URL
   });
   tips($("#app"));
   addEventListener("hashchange", () => render()); render();
