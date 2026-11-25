@@ -32,16 +32,16 @@
    "finished": false,
    "finished_on": null,
    "id": "epub_15797068167646535106",
-   "pages": 31,
-   "seconds": 1098,
-   "seconds_left": 6532,
-   "sessions": 2,
+   "pages": 69,
+   "seconds": 2051,
+   "seconds_left": 5372,
+   "sessions": 4,
    "started": "2026-11-25",
    "time_of_day": {
     "Afternoon": 0,
     "Evening": 0,
-    "Morning": 0,
-    "Night": 995
+    "Morning": 82,
+    "Night": 1866
    },
    "title": "Carmilla",
    "weekday": {
@@ -51,7 +51,7 @@
     "Sun": 0,
     "Thu": 0,
     "Tue": 0,
-    "Wed": 995
+    "Wed": 1948
    }
   },
   "circe": {
@@ -253,15 +253,15 @@
    "finished": false,
    "finished_on": null,
    "id": "epub_1885050718609949113",
-   "pages": 75,
-   "seconds": 3305,
-   "seconds_left": 21589,
-   "sessions": 4,
+   "pages": 97,
+   "seconds": 4125,
+   "seconds_left": 20424,
+   "sessions": 6,
    "started": "2026-11-24",
    "time_of_day": {
     "Afternoon": 120,
     "Evening": 901,
-    "Morning": 0,
+    "Morning": 820,
     "Night": 2284
    },
    "title": "The Hunger Games",
@@ -272,7 +272,7 @@
     "Sun": 0,
     "Thu": 0,
     "Tue": 2457,
-    "Wed": 848
+    "Wed": 1668
    }
   },
   "the ocean at the end of the lane": {
@@ -361,7 +361,7 @@
   "finished": 6,
   "last_day": "2026-11-25",
   "longest_streak": 27,
-  "pages": 3244,
+  "pages": 3304,
   "read_days": [
    "2026-09-14",
    "2026-09-15",
@@ -410,13 +410,13 @@
    "2026-11-24",
    "2026-11-25"
   ],
-  "seconds": 113031,
-  "sessions": 154,
+  "seconds": 114804,
+  "sessions": 158,
   "time_of_day": {
    "Afternoon": 17647,
    "Evening": 15484,
-   "Morning": 7168,
-   "Night": 31309
+   "Morning": 8070,
+   "Night": 32180
   },
   "weekday": {
    "Fri": 11782,
@@ -425,8 +425,8 @@
    "Sun": 6689,
    "Thu": 14712,
    "Tue": 9756,
-   "Wed": 18045
+   "Wed": 19818
   }
  },
- "taken_at": "2026-11-25T04:08:20.526639-07:00"
+ "taken_at": "2026-11-25T11:36:14.096763-07:00"
 }
