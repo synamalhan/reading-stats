@@ -31,17 +31,17 @@
    "author": "J Sheridan le Fanu",
    "finished": false,
    "finished_on": null,
-   "id": "epub_12268809903462335018",
-   "pages": 0,
-   "seconds": 103,
-   "seconds_left": 0,
-   "sessions": 0,
-   "started": null,
+   "id": "epub_15797068167646535106",
+   "pages": 31,
+   "seconds": 1098,
+   "seconds_left": 6532,
+   "sessions": 2,
+   "started": "2026-11-25",
    "time_of_day": {
     "Afternoon": 0,
     "Evening": 0,
     "Morning": 0,
-    "Night": 0
+    "Night": 995
    },
    "title": "Carmilla",
    "weekday": {
@@ -51,7 +51,7 @@
     "Sun": 0,
     "Thu": 0,
     "Tue": 0,
-    "Wed": 0
+    "Wed": 995
    }
   },
   "circe": {
@@ -253,16 +253,16 @@
    "finished": false,
    "finished_on": null,
    "id": "epub_1885050718609949113",
-   "pages": 53,
-   "seconds": 2457,
-   "seconds_left": 23120,
-   "sessions": 3,
+   "pages": 75,
+   "seconds": 3305,
+   "seconds_left": 21589,
+   "sessions": 4,
    "started": "2026-11-24",
    "time_of_day": {
     "Afternoon": 120,
     "Evening": 901,
     "Morning": 0,
-    "Night": 1436
+    "Night": 2284
    },
    "title": "The Hunger Games",
    "weekday": {
@@ -272,7 +272,7 @@
     "Sun": 0,
     "Thu": 0,
     "Tue": 2457,
-    "Wed": 0
+    "Wed": 848
    }
   },
   "the ocean at the end of the lane": {
@@ -359,9 +359,9 @@
  },
  "global_stats": {
   "finished": 6,
-  "last_day": "2026-11-24",
+  "last_day": "2026-11-25",
   "longest_streak": 27,
-  "pages": 3190,
+  "pages": 3244,
   "read_days": [
    "2026-09-14",
    "2026-09-15",
@@ -407,15 +407,16 @@
    "2026-11-13",
    "2026-11-14",
    "2026-11-23",
-   "2026-11-24"
+   "2026-11-24",
+   "2026-11-25"
   ],
-  "seconds": 111188,
-  "sessions": 151,
+  "seconds": 113031,
+  "sessions": 154,
   "time_of_day": {
    "Afternoon": 17647,
    "Evening": 15484,
    "Morning": 7168,
-   "Night": 29466
+   "Night": 31309
   },
   "weekday": {
    "Fri": 11782,
@@ -424,8 +425,8 @@
    "Sun": 6689,
    "Thu": 14712,
    "Tue": 9756,
-   "Wed": 16202
+   "Wed": 18045
   }
  },
- "taken_at": "2026-11-25T00:51:00-07:00"
+ "taken_at": "2026-11-25T04:08:20.526639-07:00"
 }
