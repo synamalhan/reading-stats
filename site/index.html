@@ -83,6 +83,32 @@
   .tip { position: fixed; pointer-events: none; background: var(--ink); color: var(--page); font-size: 14px; font-weight: 600;
          padding: 5px 10px; border-radius: 8px; opacity: 0; white-space: nowrap; z-index: 2; }
   footer { color: var(--soft); font-size: 14px; margin-top: 64px; }
+
+  /* Spines / Covers switch */
+  .views { display: inline-flex; gap: 4px; margin-top: 30px; padding: 4px; background: var(--track); border-radius: 99px; }
+  .views button { font: 700 15px "Bricolage Grotesque", system-ui, sans-serif; color: var(--ink); background: none; border: 0;
+                  padding: 7px 18px; border-radius: 99px; cursor: pointer; }
+  .views button[aria-pressed="true"] { background: var(--ink); color: var(--page); }
+  .views button:focus-visible { outline: 3px solid var(--sky); outline-offset: 2px; }
+
+  /* Covers */
+  .covers { display: grid; grid-template-columns: repeat(auto-fill, minmax(124px, 1fr)); gap: 26px 20px; margin-top: 28px; }
+  @media (max-width: 480px) { .covers { grid-template-columns: repeat(3, 1fr); gap: 20px 12px; } }
+  .cv { text-decoration: none; display: block; }
+  .art { position: relative; aspect-ratio: 2 / 3; border-radius: 4px 10px 10px 4px; overflow: hidden; background: var(--c);
+         color: #1c1638; box-shadow: 6px 6px 0 var(--c2); transition: transform .15s; }
+  .cv:hover .art, .cv:focus-visible .art { transform: rotate(-2deg) translateY(-4px); }
+  .art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .art .plain { padding: 12px 10px; font-weight: 800; font-size: 16px; line-height: 1.05; font-variation-settings: "wdth" 80; }
+  .art .plain small { display: block; font-weight: 500; font-size: 12px; margin-top: 6px; }
+  .art.dark .plain { color: #fff; }
+  .art .star { position: absolute; top: 6px; right: 6px; width: 26px; height: 26px; border-radius: 50%; background: var(--sun);
+               color: #1c1638; display: grid; place-items: center; font-size: 14px; box-shadow: 0 0 0 2px var(--page); }
+  .cv .when { display: block; margin-top: 12px; font-size: 14px; font-weight: 700; }
+  .cv .when small { display: block; font-weight: 400; color: var(--soft); }
+  .cover.with-art { display: flex; gap: 24px; align-items: flex-end; justify-content: space-between; }
+  .cover.with-art img { width: clamp(84px, 18vw, 140px); aspect-ratio: 2 / 3; object-fit: cover; border-radius: 4px 10px 10px 4px;
+                        box-shadow: 6px 6px 0 rgba(28,22,56,.25); flex: none; }
 </style>
 </head>
 <body>
@@ -124,6 +150,24 @@ function streakNow(days, today) {
   let n = 0, d = days[today] ? today : addDays(today, -1);
   while (days[d]) { n++; d = addDays(d, -1); }
   return n;
+}
+
+const coverUrl = (id) => `https://covers.openlibrary.org/b/id/${id}-M.jpg?default=false`;
+let VIEW = "spines";
+try { VIEW = localStorage.getItem("view") === "covers" ? "covers" : "spines"; } catch {}
+
+function coverGrid(books) {
+  return `<div class="covers">${books.map((b) => {
+    const c = colorOf(b.key), next = COLORS[(COLORS.indexOf(c) + 3) % COLORS.length];
+    // The plain cover sits underneath; a missing image removes itself and leaves it showing.
+    return `<a class="cv" href="#/${encodeURIComponent(b.key)}" aria-label="${esc(b.title)}, ${words(b.seconds)}${b.finished ? ", finished" : ""}">
+      <div class="art${DARK.has(c) ? " dark" : ""}" style="--c:var(--${c});--c2:var(--${next})">
+        <div class="plain" aria-hidden="true">${esc(b.title)}${b.author ? `<small>${esc(b.author)}</small>` : ""}</div>
+        ${b.cover ? `<img src="${coverUrl(b.cover)}" alt="" loading="lazy" onerror="this.remove()">` : ""}
+        ${b.finished ? '<span class="star" aria-hidden="true">★</span>' : ""}
+      </div>
+      <span class="when">${hm(b.seconds)}<small>${b.finished ? "finished" : "reading"}</small></span></a>`;
+  }).join("")}</div>`;
 }
 
 function shelf(books) {
@@ -183,8 +227,12 @@ function home(data) {
     <p class="lede"><b>${words(g.seconds)}</b> of reading across <b>${data.books.length} books</b>, ${g.finished} of them finished.
       ${streak ? `You're on a <b>${streak}-day streak</b>.` : lastRead ? `Last read on ${fmt(lastRead)}.` : ""}
       ${week ? `This week so far: <b>${hm(week)}</b>.` : ""} Your longest streak is ${g.longest_streak} days.</p>
-    ${shelf(data.books)}
-    <p class="hint" style="margin-top:12px">Taller spines got more of your time. Stars are finished books. Tap one to open it.</p>
+    <div class="views" role="group" aria-label="Shelf view">
+      <button type="button" data-view="spines" aria-pressed="${VIEW === "spines"}">Spines</button>
+      <button type="button" data-view="covers" aria-pressed="${VIEW === "covers"}">Covers</button>
+    </div>
+    ${VIEW === "covers" ? coverGrid(data.books)
+      : `${shelf(data.books)}<p class="hint" style="margin-top:12px">Taller spines got more of your time. Stars are finished books. Tap one to open it.</p>`}
 
     <h2>Your reading year</h2>
     <p class="hint">${readDays.length} days with reading so far.</p>
@@ -230,8 +278,9 @@ function bookPage(data, b) {
   const enough = (o) => Object.values(o).reduce((a, v) => a + v, 0) >= b.seconds * 0.5;
   return `
     <a class="back" href="#/">← Back to the shelf</a>
-    <section class="cover${DARK.has(c) ? " dark" : ""}" style="--c:var(--${c})">
-      <h1>${esc(b.title)}</h1>${b.author ? `<p>${esc(b.author)}</p>` : ""}${b.finished ? '<span class="done">★ Finished</span>' : ""}
+    <section class="cover${DARK.has(c) ? " dark" : ""}${b.cover ? " with-art" : ""}" style="--c:var(--${c})">
+      <div><h1>${esc(b.title)}</h1>${b.author ? `<p>${esc(b.author)}</p>` : ""}${b.finished ? '<span class="done">★ Finished</span>' : ""}</div>
+      ${b.cover ? `<img src="${coverUrl(b.cover)}" alt="Cover of ${esc(b.title)}" onerror="this.remove()">` : ""}
     </section>
     <p class="facts">${lines}</p>
     <h2>Day by day</h2>
@@ -244,14 +293,21 @@ function bookPage(data, b) {
 
 fetch("data.json", { cache: "no-store" }).then((r) => r.json()).then((data) => {
   pickColors(data.books);
-  const render = () => {
+  const render = (keepScroll) => {
     const k = decodeURIComponent(location.hash.replace(/^#\/?/, "")), b = data.books.find((x) => x.key === k);
     document.title = b ? `${b.title} · Syna's Shelf` : "Syna's Shelf";
     $("#app").innerHTML = b ? bookPage(data, b) : home(data);
     const y = $(".year"); if (y) y.scrollLeft = y.scrollWidth;  // open the year grid on recent months
-    tips($("#app")); scrollTo(0, 0);
+    if (!keepScroll) scrollTo(0, 0);
   };
-  addEventListener("hashchange", render); render();
+  $("#app").addEventListener("click", (e) => {
+    const v = e.target.closest("[data-view]")?.dataset.view;
+    if (!v || v === VIEW) return;
+    VIEW = v; try { localStorage.setItem("view", v); } catch {}
+    render(true); $(`[data-view="${v}"]`).focus();
+  });
+  tips($("#app"));
+  addEventListener("hashchange", () => render()); render();
 }).catch(() => ($("#app").innerHTML = `<h1>Syna's<br>shelf</h1><p class="lede">No stats yet. Open File Transfer on the reader and run Sync Reader.</p>`));
 </script>
 </body>

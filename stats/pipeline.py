@@ -9,7 +9,7 @@ An upload is a zip holding global_stats.bin, daily_minutes.bin and, per book, ei
 The reader keeps only running totals per book, so time per book per day comes from comparing
 each upload with the previous one.
 """
-import json, os, re, sys, zipfile
+import json, os, re, sys, urllib.parse, urllib.request, zipfile
 from datetime import date, datetime, timedelta, timezone
 
 from stats import decode
@@ -102,13 +102,35 @@ def ingest(zip_paths):
             books[k] = dict(s, title=title, author=author, id=bid)
 
         prev = load("latest.json", None)
+        prev_books = prev["books"] if prev else {}
+        deltas = {}
+        for k, b in books.items():
+            p = prev_books.get(k)
+            if not p:
+                deltas[k] = b["seconds"] if prev else 0
+                continue
+            base = p.get("base", {})  # totals carried over from stats files the reader has since replaced
+            p_raw = p["seconds"] - base.get("seconds", 0)
+            if b["seconds"] < p_raw:  # the reader started a fresh stats file (book moved or re-added)
+                base = {f: p[f] for f in ("seconds", "sessions", "pages")}
+                deltas[k] = b["seconds"]
+            else:
+                deltas[k] = b["seconds"] - p_raw
+            if base:
+                for f in base:
+                    b[f] += base[f]
+                b["base"] = base
+                b["started"] = min(filter(None, (b["started"], p.get("started"))), default=None)
+                b["finished"] = b["finished"] or p["finished"]
+                b["finished_on"] = b["finished_on"] or p.get("finished_on")
+        for k, p in prev_books.items():
+            books.setdefault(k, p)  # its stats file is gone from the reader; keep the last known totals
         if prev:
             prev_day = date.fromisoformat(prev["taken_at"][:10])
             span = [(prev_day + timedelta(n)).isoformat() for n in range(1, (when.date() - prev_day).days + 1)]
             span = span or [when.date().isoformat()]  # two uploads on the same day
             weights = [daily.get(d, 0) for d in span]
-            for k, b in books.items():
-                delta = b["seconds"] - prev["books"].get(k, {}).get("seconds", 0)
+            for k, delta in deltas.items():
                 if delta <= 0:
                     continue
                 # Spread across the days since the last upload, in proportion to total reading on each day.
@@ -128,14 +150,40 @@ def ingest(zip_paths):
     save("book_names.json", names)
 
 
+def open_library(params):
+    url = "https://openlibrary.org/search.json?" + urllib.parse.urlencode({**params, "fields": "cover_i", "limit": 5})
+    req = urllib.request.Request(url, headers={"User-Agent": "reading-stats (github.com/synamalhan/reading-stats)"})
+    with urllib.request.urlopen(req, timeout=15) as r:
+        return json.load(r).get("docs", [])
+
+
+def cover_id(title, author, search=open_library):
+    """Open Library cover id: title + author first, then title alone (the EPUB's author can be misspelled)."""
+    if "," in author:  # "Jewell, Lisa" -> "Lisa Jewell"
+        author = " ".join(p.strip() for p in reversed(author.split(",", 1)))
+    for params in ([{"title": title, "author": author}] if author else []) + [{"title": title}]:
+        for doc in search(params):
+            if doc.get("cover_i"):
+                return doc["cover_i"]
+    return None
+
+
 def build():
     snap = load("latest.json", None)
     if not snap:
         raise SystemExit("nothing ingested yet")
     history = load("history.json", {})
+    covers = load("covers.json", {})  # book key -> Open Library cover id, or null when it has none
+    for k, b in snap["books"].items():
+        if k not in covers:
+            try:
+                covers[k] = cover_id(b["title"], b["author"])
+            except (OSError, ValueError) as e:  # offline or a bad reply: leave uncached, try next build
+                print(f"cover lookup failed for {b['title']}: {e}")
+    save("covers.json", covers)
     out = dict(taken_at=snap["taken_at"], global_stats=snap["global_stats"], days=load("days.json", {}),
-               books=sorted(({**b, "key": k, "history": history.get(k, {})} for k, b in snap["books"].items()),
-                            key=lambda b: -b["seconds"]))
+               books=sorted(({**b, "key": k, "history": history.get(k, {}), "cover": covers.get(k)}
+                             for k, b in snap["books"].items()), key=lambda b: -b["seconds"]))
     os.makedirs(SITE, exist_ok=True)
     with open(os.path.join(SITE, "data.json"), "w") as f:
         json.dump(out, f, ensure_ascii=False)

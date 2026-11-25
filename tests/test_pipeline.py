@@ -57,5 +57,46 @@ class TwoUploads(unittest.TestCase):
             self.assertTrue(os.path.exists(os.path.join(tmp, "site", "data.json")))
 
 
+
+class Covers(unittest.TestCase):
+    def test_reorders_author_and_falls_back_to_title(self):
+        from stats.pipeline import cover_id
+        seen = []
+
+        def search(params):
+            seen.append(params)
+            return [{"cover_i": 42}] if "author" not in params else [{"title": "no cover here"}]
+
+        self.assertEqual(cover_id("None of This is True", "Jewell, Lisa", search), 42)
+        self.assertEqual(seen, [{"title": "None of This is True", "author": "Lisa Jewell"}, {"title": "None of This is True"}])
+        self.assertIsNone(cover_id("Nothing", "", lambda p: []))
+
+class MovedBooks(unittest.TestCase):
+    def test_moved_book_keeps_old_time_and_missing_book_stays(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            os.environ["STATS_DATA"] = os.path.join(tmp, "data")
+            os.environ["STATS_SITE"] = os.path.join(tmp, "site")
+            import importlib, stats.pipeline as p
+            importlib.reload(p)
+
+            def upload(name, books, daily):
+                zp = os.path.join(tmp, name)
+                with zipfile.ZipFile(zp, "w") as z:
+                    z.writestr("global_stats.bin", global_bin())
+                    z.writestr("daily_minutes.bin", daily_bin(max(daily), daily))
+                    for bid, (title, seconds) in books.items():
+                        z.writestr(f"{bid}.stats", stats_bin(seconds))
+                        z.writestr(f"{bid}.book", book_bin(title, "A"))
+                return zp
+
+            p.ingest([upload("2026-11-24T21-00.zip", {"epub_1": ("Circe", 3000), "epub_2": ("Delilah", 600)},
+                             {day("2026-11-24"): 3600})])
+            # Circe moved folders: a new stats file with 5 min; Delilah's stats file is gone.
+            p.ingest([upload("2026-11-25T21-00.zip", {"epub_9": ("Circe", 300)}, {day("2026-11-25"): 300})])
+            books = json.load(open(os.path.join(tmp, "data", "latest.json")))["books"]
+            self.assertEqual(books["circe"]["seconds"], 3300)
+            self.assertEqual(books["delilah"]["seconds"], 600)
+            self.assertEqual(json.load(open(os.path.join(tmp, "data", "history.json")))["circe"], {"2026-11-25": 300})
+
 if __name__ == "__main__":
     unittest.main()

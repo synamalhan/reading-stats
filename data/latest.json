@@ -27,16 +27,48 @@
     "Wed": 0
    }
   },
-  "circe": {
-   "author": "Madeline Miller",
+  "carmilla": {
+   "author": "J Sheridan le Fanu",
    "finished": false,
    "finished_on": null,
-   "id": "epub_13379221376084493204",
+   "id": "epub_12268809903462335018",
    "pages": 0,
-   "seconds": 22,
+   "seconds": 103,
    "seconds_left": 0,
    "sessions": 0,
    "started": null,
+   "time_of_day": {
+    "Afternoon": 0,
+    "Evening": 0,
+    "Morning": 0,
+    "Night": 0
+   },
+   "title": "Carmilla",
+   "weekday": {
+    "Fri": 0,
+    "Mon": 0,
+    "Sat": 0,
+    "Sun": 0,
+    "Thu": 0,
+    "Tue": 0,
+    "Wed": 0
+   }
+  },
+  "circe": {
+   "author": "Madeline Miller",
+   "base": {
+    "pages": 2,
+    "seconds": 3182,
+    "sessions": 6
+   },
+   "finished": false,
+   "finished_on": null,
+   "id": "epub_13379221376084493204",
+   "pages": 2,
+   "seconds": 3204,
+   "seconds_left": 0,
+   "sessions": 6,
+   "started": "2026-10-24",
    "time_of_day": {
     "Afternoon": 22,
     "Evening": 0,
@@ -79,6 +111,33 @@
     "Thu": 1697,
     "Tue": 2704,
     "Wed": 2243
+   }
+  },
+  "delilah green doesn t care": {
+   "author": "Ashley Herring Blake",
+   "finished": false,
+   "finished_on": null,
+   "id": "epub_11858233575919101607",
+   "pages": 40,
+   "seconds": 1020,
+   "seconds_left": 0,
+   "sessions": 2,
+   "started": "2026-09-24",
+   "time_of_day": {
+    "Afternoon": 20,
+    "Evening": 0,
+    "Morning": 0,
+    "Night": 883
+   },
+   "title": "Delilah Green Doesn't Care",
+   "weekday": {
+    "Fri": 667,
+    "Mon": 0,
+    "Sat": 273,
+    "Sun": 0,
+    "Thu": 60,
+    "Tue": 0,
+    "Wed": 20
    }
   },
   "imogen obviously": {
@@ -160,6 +219,33 @@
     "Thu": 2442,
     "Tue": 0,
     "Wed": 4481
+   }
+  },
+  "the gifts of imperfection": {
+   "author": "Brené Brown",
+   "finished": false,
+   "finished_on": null,
+   "id": "epub_12534200741779931188",
+   "pages": 0,
+   "seconds": 712,
+   "seconds_left": 0,
+   "sessions": 1,
+   "started": "2026-11-12",
+   "time_of_day": {
+    "Afternoon": 0,
+    "Evening": 0,
+    "Morning": 0,
+    "Night": 0
+   },
+   "title": "The Gifts of Imperfection",
+   "weekday": {
+    "Fri": 519,
+    "Mon": 0,
+    "Sat": 0,
+    "Sun": 0,
+    "Thu": 193,
+    "Tue": 0,
+    "Wed": 0
    }
   },
   "the hunger games": {
@@ -341,5 +427,5 @@
    "Wed": 16202
   }
  },
- "taken_at": "2026-11-25T00:56:47.092373-07:00"
+ "taken_at": "2026-11-25T00:51:00-07:00"
 }
