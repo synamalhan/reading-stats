@@ -82,3 +82,8 @@ Copy the card's `.crosspoint` folder, zip it as `YYYY-MM-DDTHH-MM.zip`, and drop
 ## Moving
 
 Day boundaries use Arizona time (UTC−7). Change `TZ` in `stats/pipeline.py` if that changes.
+
+## Books you didn't finish
+
+List their titles in `data/dnf.json` (edit it on GitHub, pencil icon), e.g. `["The Gifts of Imperfection"]`.
+Saving the file rebuilds the site: those books get a DNF tag and never show as "currently reading".
