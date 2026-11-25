@@ -4,7 +4,7 @@
    "author": "George Orwel",
    "finished": false,
    "finished_on": null,
-   "id": "epub_16646509195710853181",
+   "id": "epub_732322514003543541",
    "pages": 3,
    "seconds": 100,
    "seconds_left": 0,
@@ -27,58 +27,31 @@
     "Wed": 0
    }
   },
-  "carmilla": {
-   "author": "J Sheridan le Fanu",
-   "finished": false,
-   "finished_on": null,
-   "id": "epub_12268809903462335018",
-   "pages": 0,
-   "seconds": 103,
-   "seconds_left": 0,
-   "sessions": 0,
-   "started": null,
-   "time_of_day": {
-    "Afternoon": 0,
-    "Evening": 0,
-    "Morning": 0,
-    "Night": 0
-   },
-   "title": "Carmilla",
-   "weekday": {
-    "Fri": 0,
-    "Mon": 0,
-    "Sat": 0,
-    "Sun": 0,
-    "Thu": 0,
-    "Tue": 0,
-    "Wed": 0
-   }
-  },
   "circe": {
    "author": "Madeline Miller",
    "finished": false,
    "finished_on": null,
-   "id": "epub_6305951288542968818",
-   "pages": 2,
-   "seconds": 3182,
+   "id": "epub_13379221376084493204",
+   "pages": 0,
+   "seconds": 22,
    "seconds_left": 0,
-   "sessions": 6,
-   "started": "2026-10-24",
+   "sessions": 0,
+   "started": null,
    "time_of_day": {
-    "Afternoon": 0,
-    "Evening": 80,
+    "Afternoon": 22,
+    "Evening": 0,
     "Morning": 0,
     "Night": 0
    },
    "title": "Circe",
    "weekday": {
-    "Fri": 765,
-    "Mon": 0,
-    "Sat": 68,
-    "Sun": 5,
-    "Thu": 616,
-    "Tue": 1211,
-    "Wed": 518
+    "Fri": 0,
+    "Mon": 22,
+    "Sat": 0,
+    "Sun": 0,
+    "Thu": 0,
+    "Tue": 0,
+    "Wed": 0
    }
   },
   "daisy darker": {
@@ -108,57 +81,30 @@
     "Wed": 2243
    }
   },
-  "delilah green doesn t care": {
-   "author": "Ashley Herring Blake",
-   "finished": false,
-   "finished_on": null,
-   "id": "epub_11858233575919101607",
-   "pages": 40,
-   "seconds": 1020,
-   "seconds_left": 0,
-   "sessions": 2,
-   "started": "2026-09-24",
-   "time_of_day": {
-    "Afternoon": 20,
-    "Evening": 0,
-    "Morning": 0,
-    "Night": 883
-   },
-   "title": "Delilah Green Doesn't Care",
-   "weekday": {
-    "Fri": 667,
-    "Mon": 0,
-    "Sat": 273,
-    "Sun": 0,
-    "Thu": 60,
-    "Tue": 0,
-    "Wed": 20
-   }
-  },
   "imogen obviously": {
    "author": "Becky Albertalli",
    "finished": false,
    "finished_on": null,
-   "id": "epub_17299403645707294416",
-   "pages": 0,
-   "seconds": 4993,
-   "seconds_left": 0,
-   "sessions": 6,
+   "id": "epub_13959051737573765560",
+   "pages": 126,
+   "seconds": 7798,
+   "seconds_left": 14055,
+   "sessions": 14,
    "started": "2026-11-12",
    "time_of_day": {
     "Afternoon": 0,
-    "Evening": 0,
+    "Evening": 1056,
     "Morning": 0,
-    "Night": 0
+    "Night": 1749
    },
    "title": "Imogen, Obviously",
    "weekday": {
     "Fri": 1477,
-    "Mon": 0,
+    "Mon": 2362,
     "Sat": 1213,
     "Sun": 0,
     "Thu": 2303,
-    "Tue": 0,
+    "Tue": 443,
     "Wed": 0
    }
   },
@@ -193,7 +139,7 @@
    "author": "Michael Thomas Ford",
    "finished": true,
    "finished_on": "2026-10-30",
-   "id": "epub_12378881656403577581",
+   "id": "epub_17616998387894534068",
    "pages": 516,
    "seconds": 12051,
    "seconds_left": 0,
@@ -216,30 +162,30 @@
     "Wed": 4481
    }
   },
-  "the gifts of imperfection": {
-   "author": "Brené Brown",
+  "the hunger games": {
+   "author": "Suzanne Collins",
    "finished": false,
    "finished_on": null,
-   "id": "epub_12534200741779931188",
-   "pages": 0,
-   "seconds": 712,
-   "seconds_left": 0,
-   "sessions": 1,
-   "started": "2026-11-12",
+   "id": "epub_1885050718609949113",
+   "pages": 53,
+   "seconds": 2457,
+   "seconds_left": 23120,
+   "sessions": 3,
+   "started": "2026-11-24",
    "time_of_day": {
-    "Afternoon": 0,
-    "Evening": 0,
+    "Afternoon": 120,
+    "Evening": 901,
     "Morning": 0,
-    "Night": 0
+    "Night": 1436
    },
-   "title": "The Gifts of Imperfection",
+   "title": "The Hunger Games",
    "weekday": {
-    "Fri": 519,
+    "Fri": 0,
     "Mon": 0,
     "Sat": 0,
     "Sun": 0,
-    "Thu": 193,
-    "Tue": 0,
+    "Thu": 0,
+    "Tue": 2457,
     "Wed": 0
    }
   },
@@ -327,9 +273,9 @@
  },
  "global_stats": {
   "finished": 6,
-  "last_day": "2026-11-14",
+  "last_day": "2026-11-24",
   "longest_streak": 27,
-  "pages": 3011,
+  "pages": 3190,
   "read_days": [
    "2026-09-14",
    "2026-09-15",
@@ -373,25 +319,27 @@
    "2026-11-06",
    "2026-11-12",
    "2026-11-13",
-   "2026-11-14"
+   "2026-11-14",
+   "2026-11-23",
+   "2026-11-24"
   ],
-  "seconds": 105904,
-  "sessions": 140,
+  "seconds": 111188,
+  "sessions": 151,
   "time_of_day": {
-   "Afternoon": 17505,
-   "Evening": 13527,
+   "Afternoon": 17647,
+   "Evening": 15484,
    "Morning": 7168,
-   "Night": 26281
+   "Night": 29466
   },
   "weekday": {
    "Fri": 11782,
-   "Mon": 17016,
+   "Mon": 19400,
    "Sat": 10158,
    "Sun": 6689,
    "Thu": 14712,
-   "Tue": 6856,
+   "Tue": 9756,
    "Wed": 16202
   }
  },
- "taken_at": "2026-11-23T15:45:00-07:00"
+ "taken_at": "2026-11-25T00:56:47.092373-07:00"
 }
