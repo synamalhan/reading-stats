@@ -41,7 +41,7 @@ class TwoUploads(unittest.TestCase):
                 with zipfile.ZipFile(zp, "w") as z:
                     z.writestr("global_stats.bin", global_bin())
                     z.writestr("daily_minutes.bin", daily_bin(max(daily), daily))
-                    z.writestr("epub_1.stats", stats_bin(seconds))
+                    z.writestr("epub_1.stats.bin", stats_bin(seconds))  # as iOS may rename it
                     z.writestr("epub_1.book", book_bin("Circe", "Madeline Miller"))
                     z.writestr("epub_2.stats", b"404 Not Found")  # must be skipped, not crash
                 return zp

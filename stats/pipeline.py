@@ -60,12 +60,12 @@ def read_zip(zip_path):
                 continue
             data = z.read(name)
             folder = os.path.basename(os.path.dirname(name))
-            m = re.fullmatch(r"(epub_\d+)\.(stats|book)", base)
+            m = re.fullmatch(r"(epub_\d+)\.(stats|book)(\.bin)?", base)  # iOS may append .bin
             bid, kind = (m[1], m[2]) if m else (folder, {"stats_v5.bin": "stats", "book.bin": "book"}.get(base))
             try:
-                if base == "global_stats.bin":
+                if re.fullmatch(r"global_stats(\.bin)+", base):
                     g = decode.global_stats(data)
-                elif base == "daily_minutes.bin":
+                elif re.fullmatch(r"daily_minutes(\.bin)+", base):
                     daily = decode.daily_minutes(data)
                 elif kind == "stats" and bid.startswith("epub_"):
                     stats[bid] = decode.book_stats(data)
