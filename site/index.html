@@ -222,14 +222,14 @@ function shelf(books) {
   return `<div class="shelf"><div class="books">${books.map((b, i) => {
     const h = Math.round(100 + 120 * Math.sqrt(b.seconds / max)), w = 32 + (i * 7) % 12;
     return `<a class="spine" href="#/${encodeURIComponent(b.key)}" style="--c:var(--${colorOf(b.key)});--h:${h}px;--w:${w}px"
-      data-tip="${esc(b.title)}: ${hm(b.seconds)}" aria-label="${esc(b.title)}, ${words(b.seconds)}${b.finished ? ", finished" : ""}">
-      <span>${esc(b.title)}</span>${b.finished ? '<i aria-hidden="true">✓</i>' : ""}</a>`;
+      data-tip="${esc(b.title)}: ${hm(b.seconds)}" aria-label="${esc(b.title)}, ${words(b.seconds)}${b.finished ? ", finished" : b.dnf ? ", did not finish" : ""}">
+      <span>${esc(b.title)}</span>${b.finished ? '<i aria-hidden="true">✓</i>' : b.dnf ? '<i aria-hidden="true">✕</i>' : ""}</a>`;
   }).join("")}</div><div class="plank"></div></div>`;
 }
 
 function coverGrid(books) {
-  return `<div class="covers">${books.map((b) => `<a class="cv" href="#/${encodeURIComponent(b.key)}" aria-label="${esc(b.title)}, ${words(b.seconds)}${b.finished ? ", finished" : ""}">
-    <div style="position:relative">${art(b)}${b.finished ? '<span class="heart" aria-hidden="true">✓ finished</span>' : ""}</div>
+  return `<div class="covers">${books.map((b) => `<a class="cv" href="#/${encodeURIComponent(b.key)}" aria-label="${esc(b.title)}, ${words(b.seconds)}${b.finished ? ", finished" : b.dnf ? ", did not finish" : ""}">
+    <div style="position:relative">${art(b)}${b.finished ? '<span class="heart" aria-hidden="true">✓ finished</span>' : b.dnf ? '<span class="heart" aria-hidden="true">DNF</span>' : ""}</div>
     <span class="cap">${hm(b.seconds)}</span></a>`).join("")}</div>`;
 }
 
@@ -298,7 +298,7 @@ function home(data) {
   const streak = streakNow(days, today), when = topOf(g.time_of_day, TIMES).toLowerCase(), fav = topOf(g.weekday, WEEK);
   const dayName = { Mon: "mondays", Tue: "tuesdays", Wed: "wednesdays", Thu: "thursdays", Fri: "fridays", Sat: "saturdays", Sun: "sundays" }[fav];
   const recent = [...data.books].sort((a, b) => lastDay(b).localeCompare(lastDay(a)));
-  const now = recent.find((b) => !b.finished) || recent[0];
+  const now = recent.find((b) => !b.finished && !b.dnf);
   const onlineToday = !!(days[today] || days[addDays(today, -1)]);
   const pct = now && progress(now);
 
@@ -339,7 +339,7 @@ function home(data) {
             <button type="button" data-view="covers" aria-pressed="${VIEW === "covers"}">Covers</button>
           </div>
           ${VIEW === "covers" ? coverGrid(data.books) : shelf(data.books)}
-          <p class="hint" style="margin:10px 0 0">Taller spines mean more time read. ✓ marks finished books.</p>`,
+          <p class="hint" style="margin:10px 0 0">Taller spines mean more time read. ✓ marks finished books, ✕ books you didn't finish.</p>`,
           { id: "bookshelf", label: "Bookshelf" })}
         ${win("this year", `<div class="inset"><div class="year">${year(days, today)}</div>
           <div class="key">less ${[0, 1, 2, 3, 4].map((l) => `<i style="background:var(--heat${l})"></i>`).join("")} more</div></div>`,
@@ -360,7 +360,7 @@ function home(data) {
             <p class="hint" style="margin:6px 0 0">${pct}% read${now.seconds_left && !now.finished ? `, about ${hm(now.seconds_left)} to go` : ""}</p></div>` : ""}`,
           { label: "Now reading" }) : ""}
         ${win("recent reads", `<ul class="recent">${recent.slice(0, 7).map((b) => `<li><a href="#/${encodeURIComponent(b.key)}">
-            <span>${b.finished ? "✓ " : ""}${esc(b.title)}<br><small>${lastDay(b) ? `last read ${fmt(lastDay(b))}` : ""}</small></span><span>${hm(b.seconds)}</span></a></li>`).join("")}</ul>`,
+            <span>${b.finished ? "✓ " : b.dnf ? "DNF · " : ""}${esc(b.title)}<br><small>${lastDay(b) ? `last read ${fmt(lastDay(b))}` : ""}</small></span><span>${hm(b.seconds)}</span></a></li>`).join("")}</ul>`,
           { id: "recent", label: "Recent reads" })}
         ${win("notes", `<div class="inset notepad">You read most on ${dayName}, mostly ${when === "night" ? "at night" : `in the ${when}`}.${streak ? ` Current streak: ${streak} day${streak === 1 ? "" : "s"}.` : ""}</div>`,
           { label: "Notes" })}
@@ -411,7 +411,7 @@ function bookPage(data, b) {
           </table>
         </div>
       </div>
-      ${pct !== null && !b.finished ? `<div class="prog" style="margin-top:14px"><p class="hint" style="margin:0 0 4px">Reading… ${pct}%${b.seconds_left ? `, about ${hm(b.seconds_left)} left` : ""}</p>
+      ${b.dnf ? `<p class="hint" style="margin-top:14px">Marked as did not finish.</p>` : ""}${pct !== null && !b.finished && !b.dnf ? `<div class="prog" style="margin-top:14px"><p class="hint" style="margin:0 0 4px">Reading… ${pct}%${b.seconds_left ? `, about ${hm(b.seconds_left)} left` : ""}</p>
         <div class="meter"><i style="width:${pct}%;--hc:var(--hot)"></i></div></div>` : ""}`,
       { label: "Book details" })}
     ${win("reading by day", `

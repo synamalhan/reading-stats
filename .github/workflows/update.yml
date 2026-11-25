@@ -2,7 +2,7 @@ name: Update stats
 
 on:
   push:
-    paths: ["inbox/**"]
+    paths: ["inbox/**", "data/dnf.json"]
   workflow_dispatch:
 
 permissions:

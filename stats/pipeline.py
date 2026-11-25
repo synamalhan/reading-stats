@@ -181,8 +181,9 @@ def build():
             except (OSError, ValueError) as e:  # offline or a bad reply: leave uncached, try next build
                 print(f"cover lookup failed for {b['title']}: {e}")
     save("covers.json", covers)
+    dnf = {key(t) for t in load("dnf.json", [])}  # titles you gave up on, edited by hand
     out = dict(taken_at=snap["taken_at"], global_stats=snap["global_stats"], days=load("days.json", {}),
-               books=sorted(({**b, "key": k, "history": history.get(k, {}), "cover": covers.get(k)}
+               books=sorted(({**b, "key": k, "history": history.get(k, {}), "cover": covers.get(k), "dnf": k in dnf}
                              for k, b in snap["books"].items()), key=lambda b: -b["seconds"]))
     os.makedirs(SITE, exist_ok=True)
     with open(os.path.join(SITE, "data.json"), "w") as f:

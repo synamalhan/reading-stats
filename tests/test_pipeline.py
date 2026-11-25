@@ -51,7 +51,10 @@ class TwoUploads(unittest.TestCase):
             second = upload("2026-11-26T22-00.zip", 3000, {day("2026-11-24"): 600, day("2026-11-25"): 600,
                                                            day("2026-11-26"): 1800})
             p.ingest([second, first])  # order on disk must not matter
+            p.save("dnf.json", ["Circe"])
             p.build()
+            site = json.load(open(os.path.join(tmp, "site", "data.json")))
+            self.assertTrue(site["books"][0]["dnf"])
             h = json.load(open(os.path.join(tmp, "data", "history.json")))["circe"]
             self.assertEqual(h, {"2026-11-25": 600, "2026-11-26": 1800})
             self.assertTrue(os.path.exists(os.path.join(tmp, "site", "data.json")))
