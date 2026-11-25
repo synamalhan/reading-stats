@@ -135,6 +135,11 @@
   .recent a:hover { color: var(--hot); }
   .recent small { color: var(--soft); }
   .notepad { font: 400 21px/1.2 var(--term); min-height: 110px; }
+  .today .big { font: 700 44px/1 var(--pix); color: var(--hot); }
+  .today .big small { font: 500 18px var(--pix); color: var(--soft); margin-left: 4px; }
+  .today ul { list-style: none; margin: 10px 0 0; padding: 0; }
+  .today li { display: flex; justify-content: space-between; gap: 8px; padding: 3px 0; border-top: 1px dashed var(--bar2); }
+  .today li a { text-decoration: none; }
 
   /* Dialog-style alerts */
   .dialog { text-align: center; }
@@ -265,6 +270,33 @@ function timeBars(byTime) {
 }
 const topOf = (obj, names) => names.reduce((a, b) => ((obj[b] || 0) > (obj[a] || 0) ? b : a));
 
+// Today's reading as of the last sync. The site can't see the reader, so a sync from an
+// earlier day means today's minutes are unknown, not zero.
+function todayWin(data) {
+  const now = new Date(), pad = (n) => String(n).padStart(2, "0");
+  const today = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+  const synced = data.taken_at.slice(0, 10);
+  const syncedAt = new Date(data.taken_at).toLocaleString(undefined, { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+  if (synced !== today) {
+    return win("today.exe", `<div class="today">
+      <p class="hint" style="margin:0 0 6px">not synced today yet ♡</p>
+      <p style="margin:0">last sync: ${syncedAt}. open File Transfer on the reader and run Sync Reader to see today's minutes.</p></div>`,
+      { label: "Today's reading" });
+  }
+  const secs = data.days[today] || 0;
+  const readDays = Object.values(data.days).filter(Boolean);
+  const avg = readDays.length ? readDays.reduce((a, v) => a + v, 0) / readDays.length : 0;
+  const pct = avg ? Math.min(100, Math.round((secs / avg) * 100)) : 0;
+  const books = data.books.filter((b) => b.history[today]).sort((a, b) => b.history[today] - a.history[today]);
+  const verdict = !secs ? "no reading yet today. one chapter? ♡" : secs >= avg ? "♥ beat your average day! ♥" : `${hm(avg - secs)} to reach your usual day`;
+  return win("today.exe", `<div class="today">
+    <div class="big">${Math.round(secs / 60)}<small>min today</small></div>
+    <div class="meter" style="margin-top:10px" role="img" aria-label="${pct}% of your average reading day"><i style="width:${pct}%;--hc:var(--hot)"></i></div>
+    <p class="hint" style="margin:6px 0 0">${verdict}${avg ? ` (avg day: ${hm(avg)})` : ""}</p>
+    ${books.length ? `<ul>${books.map((b) => `<li><a href="#/${encodeURIComponent(b.key)}">♡ ${esc(b.title)}</a><span>${hm(b.history[today])}</span></li>`).join("")}</ul>` : ""}
+    <p class="hint" style="margin:8px 0 0">as of ${syncedAt}</p></div>`, { label: "Today's reading" });
+}
+
 function home(data) {
   const g = data.global_stats, today = data.taken_at.slice(0, 10), days = data.days;
   const readDays = Object.keys(days).filter((d) => days[d]).sort();
@@ -296,6 +328,7 @@ function home(data) {
               ${onlineToday ? '<span class="online">Online Now!</span>' : ""}
             </div>
           </div>`)}
+        ${todayWin(data)}
         ${win("details", `
           <dl class="details">
             <dt>Time read</dt><dd>${words(g.seconds)}</dd>
