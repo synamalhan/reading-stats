@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Syna's Reading Paradise</title>
+<title>Syna's Reading</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;700&family=VT323&display=swap">
@@ -29,10 +29,6 @@
   h1, h2, h3 { margin: 0; font-family: var(--pix); }
 
   /* Ticker across the top */
-  .ticker { overflow: hidden; white-space: nowrap; background: var(--win-2); border-bottom: 2px solid var(--edge); font: 500 14px/28px var(--pix); color: var(--hot); }
-  .ticker span { display: inline-block; padding-left: 100%; }
-  @media (prefers-reduced-motion: no-preference) { .ticker span { animation: tick 28s linear infinite; } @keyframes tick { to { translate: -100% 0; } } }
-  @media (prefers-reduced-motion: reduce) { .ticker span { padding-left: 12px; } }
 
   .page { max-width: 1180px; margin: 0 auto; padding: 14px 12px 60px; }
 
@@ -126,7 +122,6 @@
   .player .art { box-shadow: none; border-color: #2d2a6e; }
   .player strong { display: block; font: 700 16px/1.1 var(--pix); }
   .player small { font-size: 17px; }
-  .ctrl { display: flex; gap: 8px; margin-top: 6px; font: 700 14px var(--pix); }
   .prog { margin-top: 10px; }
   .prog .meter i { --hc: var(--hot); }
   .recent { list-style: none; margin: 0; padding: 0; }
@@ -164,7 +159,7 @@
 </style>
 </head>
 <body>
-<div id="app"><p class="page">loading paradise.exe…</p></div>
+<div id="app"><p class="page">Loading…</p></div>
 <div class="tip" id="tip" aria-hidden="true"></div>
 <script>
 const $ = (s) => document.querySelector(s);
@@ -186,7 +181,6 @@ function pickColors(books) {
 }
 const colorOf = (key) => PICKED[key] || COLORS[hashColor(key)];
 const coverUrl = (id) => `https://covers.openlibrary.org/b/id/${id}-M.jpg?default=false`;
-const slug = (s) => s.replace(/[^a-z0-9]+/gi, "_").replace(/^_|_$/g, "").toLowerCase();
 const lastDay = (b) => Object.keys(b.history).sort().pop() || b.finished_on || b.started || "";
 
 let VIEW = "spines";
@@ -228,14 +222,14 @@ function shelf(books) {
   return `<div class="shelf"><div class="books">${books.map((b, i) => {
     const h = Math.round(100 + 120 * Math.sqrt(b.seconds / max)), w = 32 + (i * 7) % 12;
     return `<a class="spine" href="#/${encodeURIComponent(b.key)}" style="--c:var(--${colorOf(b.key)});--h:${h}px;--w:${w}px"
-      data-tip="${esc(b.title)} ♡ ${hm(b.seconds)}" aria-label="${esc(b.title)}, ${words(b.seconds)}${b.finished ? ", finished" : ""}">
-      <span>${esc(b.title)}</span>${b.finished ? '<i aria-hidden="true">♥</i>' : ""}</a>`;
+      data-tip="${esc(b.title)}: ${hm(b.seconds)}" aria-label="${esc(b.title)}, ${words(b.seconds)}${b.finished ? ", finished" : ""}">
+      <span>${esc(b.title)}</span>${b.finished ? '<i aria-hidden="true">✓</i>' : ""}</a>`;
   }).join("")}</div><div class="plank"></div></div>`;
 }
 
 function coverGrid(books) {
   return `<div class="covers">${books.map((b) => `<a class="cv" href="#/${encodeURIComponent(b.key)}" aria-label="${esc(b.title)}, ${words(b.seconds)}${b.finished ? ", finished" : ""}">
-    <div style="position:relative">${art(b)}${b.finished ? '<span class="heart" aria-hidden="true">♥ done</span>' : ""}</div>
+    <div style="position:relative">${art(b)}${b.finished ? '<span class="heart" aria-hidden="true">✓ finished</span>' : ""}</div>
     <span class="cap">${hm(b.seconds)}</span></a>`).join("")}</div>`;
 }
 
@@ -278,9 +272,9 @@ function todayWin(data) {
   const synced = data.taken_at.slice(0, 10);
   const syncedAt = new Date(data.taken_at).toLocaleString(undefined, { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
   if (synced !== today) {
-    return win("today.exe", `<div class="today">
-      <p class="hint" style="margin:0 0 6px">not synced today yet ♡</p>
-      <p style="margin:0">last sync: ${syncedAt}. open File Transfer on the reader and run Sync Reader to see today's minutes.</p></div>`,
+    return win("today", `<div class="today">
+      <p class="hint" style="margin:0 0 6px">Not synced yet today.</p>
+      <p style="margin:0">Last sync: ${syncedAt}. Open File Transfer on the reader and run Sync Reader to update.</p></div>`,
       { label: "Today's reading" });
   }
   const secs = data.days[today] || 0;
@@ -288,13 +282,13 @@ function todayWin(data) {
   const avg = readDays.length ? readDays.reduce((a, v) => a + v, 0) / readDays.length : 0;
   const pct = avg ? Math.min(100, Math.round((secs / avg) * 100)) : 0;
   const books = data.books.filter((b) => b.history[today]).sort((a, b) => b.history[today] - a.history[today]);
-  const verdict = !secs ? "no reading yet today. one chapter? ♡" : secs >= avg ? "♥ beat your average day! ♥" : `${hm(avg - secs)} to reach your usual day`;
-  return win("today.exe", `<div class="today">
-    <div class="big">${Math.round(secs / 60)}<small>min today</small></div>
+  const verdict = !secs ? "Nothing read yet today." : secs >= avg ? `Above your average day (${hm(avg)}).` : `${hm(avg - secs)} short of your average day (${hm(avg)}).`;
+  return win("today", `<div class="today">
+    <div class="big">${Math.round(secs / 60)}<small>min</small></div>
     <div class="meter" style="margin-top:10px" role="img" aria-label="${pct}% of your average reading day"><i style="width:${pct}%;--hc:var(--hot)"></i></div>
-    <p class="hint" style="margin:6px 0 0">${verdict}${avg ? ` (avg day: ${hm(avg)})` : ""}</p>
-    ${books.length ? `<ul>${books.map((b) => `<li><a href="#/${encodeURIComponent(b.key)}">♡ ${esc(b.title)}</a><span>${hm(b.history[today])}</span></li>`).join("")}</ul>` : ""}
-    <p class="hint" style="margin:8px 0 0">as of ${syncedAt}</p></div>`, { label: "Today's reading" });
+    <p class="hint" style="margin:6px 0 0">${verdict}</p>
+    ${books.length ? `<ul>${books.map((b) => `<li><a href="#/${encodeURIComponent(b.key)}">${esc(b.title)}</a><span>${hm(b.history[today])}</span></li>`).join("")}</ul>` : ""}
+    <p class="hint" style="margin:8px 0 0">As of ${syncedAt}</p></div>`, { label: "Today's reading" });
 }
 
 function home(data) {
@@ -307,25 +301,22 @@ function home(data) {
   const now = recent.find((b) => !b.finished) || recent[0];
   const onlineToday = !!(days[today] || days[addDays(today, -1)]);
   const pct = now && progress(now);
-  const ticker = [`welcome to syna's reading paradise`, now && `now reading: ${now.title}`,
-    streak ? `${streak}-day streak` : "", `${words(g.seconds)} read`, `${g.finished} books finished`].filter(Boolean).join("  ♡  ");
 
   return `
-  <div class="ticker" aria-hidden="true"><span>♡ ${esc(ticker)} ♡</span></div>
   <div class="page">
-    <header class="banner"><h1>Syna's Reading Paradise</h1><p>♡ books • streaks • late-night chapters ♡</p></header>
+    <header class="banner"><h1>Syna's Reading</h1></header>
     <nav class="tabs" aria-label="Sections">
-      <a href="#bookshelf">♡ Bookshelf</a><a href="#date-due">☆ Date due</a><a href="#habits">✿ Habits</a><a href="#recent">♪ Recent</a>
+      <a href="#bookshelf">Bookshelf</a><a href="#date-due">Year</a><a href="#habits">Habits</a><a href="#recent">Recent</a>
     </nav>
     <div class="layout">
       <aside>
-        ${win("profile.exe", `
+        ${win("profile", `
           <div class="profile">
             ${now ? `<a href="#/${encodeURIComponent(now.key)}" aria-label="Currently reading ${esc(now.title)}">${art(now, "pfp")}</a>` : `<div class="pfp"></div>`}
             <div>
               <h2 style="font-size:20px">Syna</h2>
-              <div class="mood"><b>Mood:</b><br>${now ? `reading ${esc(now.title)}` : "between books"}</div>
-              ${onlineToday ? '<span class="online">Online Now!</span>' : ""}
+              <div class="mood"><b>Currently reading</b><br>${now ? esc(now.title) : "Nothing right now"}</div>
+              ${onlineToday ? '<span class="online">Read today</span>' : ""}
             </div>
           </div>`)}
         ${todayWin(data)}
@@ -339,51 +330,49 @@ function home(data) {
             <dt>Best streak</dt><dd>${g.longest_streak} days</dd>
             <dt>Reading days</dt><dd>${readDays.length}</dd>
           </dl>`)}
-        ${streak >= 2 ? win("streak.exe", `<div class="dialog"><p>♥ ${streak} days in a row! ♥</p><span class="ok" aria-hidden="true">OK</span></div>`, { label: "Streak" }) : ""}
       </aside>
 
       <main>
-        ${win("bookshelf.exe", `
+        ${win("bookshelf", `
           <div class="switch" role="group" aria-label="Shelf view">
             <button type="button" data-view="spines" aria-pressed="${VIEW === "spines"}">Spines</button>
             <button type="button" data-view="covers" aria-pressed="${VIEW === "covers"}">Covers</button>
           </div>
           ${VIEW === "covers" ? coverGrid(data.books) : shelf(data.books)}
-          <p class="hint" style="margin:10px 0 0">Taller books got more of your time. ♥ means finished. Tap any book.</p>`,
-          { id: "bookshelf", menu: ["File", "Edit", "View", "Books", "Help"], label: "Bookshelf" })}
-        ${win("date_due.exe", `<div class="inset"><div class="year">${year(days, today)}</div>
+          <p class="hint" style="margin:10px 0 0">Taller spines mean more time read. ✓ marks finished books.</p>`,
+          { id: "bookshelf", label: "Bookshelf" })}
+        ${win("this year", `<div class="inset"><div class="year">${year(days, today)}</div>
           <div class="key">less ${[0, 1, 2, 3, 4].map((l) => `<i style="background:var(--heat${l})"></i>`).join("")} more</div></div>`,
           { id: "date-due", label: "Reading by day" })}
-        ${win("habits.exe", `<div class="pair">
+        ${win("habits", `<div class="pair">
           <div><h3 style="font-size:16px;margin-bottom:8px">Day of the week</h3>${weekBars(g.weekday)}</div>
           <div><h3 style="font-size:16px;margin-bottom:8px">Time of day</h3>${timeBars(g.time_of_day)}
             <p class="hint" style="margin:10px 0 0">Counts reading since CrossInk.</p></div></div>`, { id: "habits", label: "Reading habits" })}
       </main>
 
       <aside>
-        ${now ? win("now_reading.app", `
+        ${now ? win("now reading", `
           <a class="player" href="#/${encodeURIComponent(now.key)}" style="text-decoration:none">
             ${art(now)}
-            <span><strong>${esc(now.title)}</strong><small>${esc(now.author || "")}</small>
-              <span class="ctrl" aria-hidden="true">⏮ ▶ ⏸ ⏭</span></span>
+            <span><strong>${esc(now.title)}</strong><small>${esc(now.author || "")}</small></span>
           </a>
           ${pct !== null ? `<div class="prog"><div class="meter"><i style="width:${pct}%"></i></div>
             <p class="hint" style="margin:6px 0 0">${pct}% read${now.seconds_left && !now.finished ? `, about ${hm(now.seconds_left)} to go` : ""}</p></div>` : ""}`,
           { label: "Now reading" }) : ""}
         ${win("recent reads", `<ul class="recent">${recent.slice(0, 7).map((b) => `<li><a href="#/${encodeURIComponent(b.key)}">
-            <span>${b.finished ? "♥" : "♡"} ${esc(b.title)}<br><small>${lastDay(b) ? `last read ${fmt(lastDay(b))}` : ""}</small></span><span>${hm(b.seconds)}</span></a></li>`).join("")}</ul>`,
+            <span>${b.finished ? "✓ " : ""}${esc(b.title)}<br><small>${lastDay(b) ? `last read ${fmt(lastDay(b))}` : ""}</small></span><span>${hm(b.seconds)}</span></a></li>`).join("")}</ul>`,
           { id: "recent", label: "Recent reads" })}
-        ${win("♥ - Notepad", `<div class="inset notepad">you read the most on ${dayName}, mostly at ${when === "night" ? "night" : `in the ${when}`}. ${streak ? `${streak} day${streak === 1 ? "" : "s"} in a row right now. keep going, okay?` : "one chapter tonight? ♡"}</div>`,
-          { menu: ["File", "Edit", "Format", "View"], label: "Notepad" })}
+        ${win("notes", `<div class="inset notepad">You read most on ${dayName}, mostly ${when === "night" ? "at night" : `in the ${when}`}.${streak ? ` Current streak: ${streak} day${streak === 1 ? "" : "s"}.` : ""}</div>`,
+          { label: "Notes" })}
       </aside>
     </div>
-    <footer>last synced ${new Date(data.taken_at).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" })} ♡ made with love and VT323</footer>
+    <footer>last synced ${new Date(data.taken_at).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" })}</footer>
   </div>`;
 }
 
 function chart(history, color) {
   const ds = Object.keys(history).sort();
-  if (!ds.length) return `<p class="hint">nothing dated for this book yet. read, sync, and it'll show up here ♡</p>`;
+  if (!ds.length) return `<p class="hint">No dated reading for this book yet. It fills in as you sync.</p>`;
   const last = ds[ds.length - 1], first = between(ds[0], last) < 13 ? addDays(last, -13) : ds[0];  // at least two weeks wide
   const n = between(first, last) + 1, small = innerWidth < 640;
   const W = small ? 360 : 720, H = small ? 150 : 190, slot = W / n, bw = Math.max(3, slot - (n > 40 ? 1 : 4));
@@ -407,29 +396,28 @@ function bookPage(data, b) {
   return `
   <div class="page">
     <a class="back ok" href="#/">← back</a>
-    ${win(`${slug(b.title)}.txt - Properties`, `
+    ${win(`${esc(b.title)}`, `
       <div class="props">
         ${art(b, "pfp")}
         <div>
           <h1>${esc(b.title)}</h1>${b.author ? `<p class="by">by ${esc(b.author)}</p>` : ""}
           <table>
-            ${row("Size", `${hm(b.seconds)} read`)}
-            ${row("Sittings", b.sessions && `${b.sessions}, about ${hm(b.seconds / b.sessions)} each`)}
-            ${row("Created", b.started && fmt(b.started, long))}
+            ${row("Time read", hm(b.seconds))}
+            ${row("Sessions", b.sessions && `${b.sessions}, about ${hm(b.seconds / b.sessions)} each`)}
+            ${row("Started", b.started && fmt(b.started, long))}
             ${row("Finished", b.finished_on && fmt(b.finished_on, long))}
-            ${row("Took", span && (span === 1 ? "one day!" : `${span} days`))}
+            ${row("Took", span && (span === 1 ? "1 day" : `${span} days`))}
             ${row("Pages", b.pages >= 20 && `${b.pages} turned`)}
           </table>
         </div>
       </div>
       ${pct !== null && !b.finished ? `<div class="prog" style="margin-top:14px"><p class="hint" style="margin:0 0 4px">Reading… ${pct}%${b.seconds_left ? `, about ${hm(b.seconds_left)} left` : ""}</p>
         <div class="meter"><i style="width:${pct}%;--hc:var(--hot)"></i></div></div>` : ""}`,
-      { menu: ["General", "Details", "Sharing"], label: "Book details" })}
-    ${b.finished ? win("complete!", `<div class="dialog"><p>✔ You finished ${esc(b.title)}! ♥</p><a class="ok" href="#/">OK</a></div>`, { label: "Finished" }) : ""}
-    ${win("activity_monitor.exe", `
-      ${tracked && tracked < b.seconds * 0.95 ? `<p class="hint">showing ${hm(tracked)} of ${hm(b.seconds)}. older reading on this book was saved without dates.</p>` : ""}
+      { label: "Book details" })}
+    ${win("reading by day", `
+      ${tracked && tracked < b.seconds * 0.95 ? `<p class="hint">Shows ${hm(tracked)} of ${hm(b.seconds)}. Earlier reading on this book has no dates.</p>` : ""}
       <div class="inset chart">${chart(b.history, c)}</div>`, { label: "Reading day by day" })}
-    ${enough(b.weekday) || enough(b.time_of_day) ? win("habits.exe", `<div class="pair">
+    ${enough(b.weekday) || enough(b.time_of_day) ? win("habits", `<div class="pair">
       ${enough(b.weekday) ? `<div><h3 style="font-size:16px;margin-bottom:8px">Day of the week</h3>${weekBars(b.weekday)}</div>` : "<div></div>"}
       ${enough(b.time_of_day) ? `<div><h3 style="font-size:16px;margin-bottom:8px">Time of day</h3>${timeBars(b.time_of_day)}</div>` : ""}</div>`, { label: "When you read it" }) : ""}
     <footer>last synced ${new Date(data.taken_at).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" })}</footer>
@@ -443,7 +431,7 @@ fetch("data.json", { cache: "no-store" }).then((r) => r.json()).then((data) => {
     const section = location.hash && !location.hash.startsWith("#/") ? location.hash.slice(1) : "";  // tab links like #habits
     const k = section ? "" : decodeURIComponent(location.hash.replace(/^#\/?/, "")), b = data.books.find((x) => x.key === k);
     if (section && shown === "home" && !force) return $(`#${CSS.escape(section)}`)?.scrollIntoView();
-    document.title = b ? `${b.title} ♡ Syna's Reading Paradise` : "Syna's Reading Paradise";
+    document.title = b ? `${b.title}, Syna's Reading` : "Syna's Reading";
     $("#app").innerHTML = b ? bookPage(data, b) : home(data);
     shown = b ? "book" : "home";
     const y = $(".year"); if (y) y.scrollLeft = y.scrollWidth;  // open the year grid on recent months
@@ -459,7 +447,7 @@ fetch("data.json", { cache: "no-store" }).then((r) => r.json()).then((data) => {
   });
   tips($("#app"));
   addEventListener("hashchange", () => render()); render();
-}).catch(() => ($("#app").innerHTML = `<div class="page">${win("error", `<div class="dialog"><p>no stats yet! open File Transfer on the reader and run Sync Reader.</p></div>`)}</div>`));
+}).catch(() => ($("#app").innerHTML = `<div class="page">${win("error", `<div class="dialog"><p>No stats yet. Open File Transfer on the reader and run Sync Reader.</p></div>`)}</div>`));
 </script>
 </body>
 </html>
