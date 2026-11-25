@@ -3,116 +3,142 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Syna's Shelf</title>
+<title>Syna's Library Card</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Shantell+Sans:wght@400;600;800&display=swap">
 <style>
   :root {
-    --page: #f1eeff; --ink: #221c48; --soft: #6a6396; --plank: #221c48; --track: #e2ddfb;
-    --tomato: #ff5a4e; --sun: #ffc23c; --grass: #25b872; --sky: #3d86ff;
-    --gum: #ff79c4; --grape: #8a5cf6; --tang: #ff8a3d; --teal: #14b3a6;
-    --heat1: #d9ccff; --heat2: #b69bff; --heat3: #8a5cf6; --heat4: #5b2fd1;
+    --wall: #e4f1ea; --wall-dot: #cfe4d8; --ink: #2e2a4f; --soft: #6c6890; --rule: #b9d3ee; --margin: #f2a7b8;
+    --berry: #c2416b;
+    /* card stock */
+    --stock: #fffdf8; --pink: #ffe3ec; --butter: #fff3c4; --blue: #e2efff; --lilac: #ece4ff;
+    /* book colors */
+    --peach: #ffc9b5; --sun: #ffe08f; --mint: #b8e6c9; --sky: #bcd8ff; --plum: #d6c5ff; --rose: #ffc2da; --sage: #cfe0b4; --aqua: #b4e5e3;
+    --heat1: #e7dcff; --heat2: #cbb6ff; --heat3: #a98cf0; --heat4: #7d5fd1;
+    --typed: "Courier Prime", "Courier New", monospace;
+    --hand: "Shantell Sans", "Comic Sans MS", system-ui, sans-serif;
   }
+  :root { --wall-ink: var(--ink); --wall-soft: var(--soft); }
   @media (prefers-color-scheme: dark) {
-    :root { --page: #17132e; --ink: #f1eeff; --soft: #a79fd6; --plank: #f1eeff; --track: #2a2450;
-            --heat1: #3b2f74; --heat2: #5b43b3; --heat3: #8a5cf6; --heat4: #c3a8ff; }
+    :root { --wall: #24223a; --wall-dot: #2f2c4a; --wall-ink: #f4f0ff; --wall-soft: #b8b3dc; }
   }
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--page); color: var(--ink);
-         font: 400 17px/1.55 "Bricolage Grotesque", system-ui, sans-serif; font-variation-settings: "wdth" 100; }
-  main { max-width: 1000px; margin: 0 auto; padding: 32px 20px 72px; }
+  body { margin: 0; color: var(--ink); font: 400 17px/28px var(--typed);
+         background: var(--wall) radial-gradient(var(--wall-dot) 1.2px, transparent 1.6px) 0 0 / 18px 18px; }
+  main { max-width: 980px; margin: 0 auto; padding: 36px 18px 80px; }
   a { color: inherit; }
-  a:focus-visible { outline: 3px solid var(--sky); outline-offset: 3px; border-radius: 4px; }
-  h1, h2 { margin: 0; font-weight: 800; letter-spacing: -0.02em; }
-  h1 { font-size: clamp(44px, 9vw, 88px); line-height: 0.92; font-variation-settings: "wdth" 75, "opsz" 96; }
-  h2 { font-size: 26px; margin: 56px 0 6px; font-variation-settings: "wdth" 85; }
-  .lede { font-size: 20px; max-width: 34em; margin: 14px 0 0; }
-  .lede b { font-weight: 700; }
-  .hint { color: var(--soft); font-size: 15px; margin: 0 0 18px; max-width: 40em; }
+  a:focus-visible, button:focus-visible { outline: 3px dashed var(--berry); outline-offset: 4px; }
+  h1, h2, h3 { margin: 0; font-weight: 700; }
 
-  /* The shelf */
-  .shelf { margin-top: 36px; overflow-x: auto; padding: 0 2px 2px; scrollbar-width: thin; }
-  .books { display: flex; align-items: flex-end; gap: 6px; min-height: 250px; padding: 0 8px; width: max-content; }
-  .spine { position: relative; display: flex; align-items: flex-start; justify-content: center; text-decoration: none;
-           width: var(--w); height: var(--h); background: var(--c); color: #1c1638; border-radius: 6px 6px 2px 2px;
-           padding: 14px 0 10px; box-shadow: inset -5px 0 0 rgba(0,0,0,.13), inset 3px 0 0 rgba(255,255,255,.28);
-           transform-origin: bottom; transition: transform .15s; }
-  .spine:hover, .spine:focus-visible { transform: translateY(-8px); }
-  .spine span { writing-mode: vertical-rl; transform: rotate(180deg); font-weight: 700; font-size: 14px; line-height: 1;
-                white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-height: calc(var(--h) - 40px);
-                font-variation-settings: "wdth" 80; }
-  .spine.dark span { color: #fff; }
-  .spine .star { position: absolute; bottom: 8px; left: 50%; translate: -50% 0; font-size: 13px; }
-  .plank { height: 14px; background: var(--plank); border-radius: 3px; margin-top: 0; width: max(100%, var(--shelf-w)); }
+  /* Paper cards */
+  .card { position: relative; background: var(--paper, var(--stock)); border-radius: 3px; padding: 22px 24px 24px;
+          box-shadow: 0 1px 0 rgba(46,42,79,.12), 0 12px 22px -14px rgba(46,42,79,.45); rotate: var(--r, 0deg); }
+  .ruled { background-image:
+      linear-gradient(var(--margin), var(--margin)), repeating-linear-gradient(transparent 0 27px, var(--rule) 27px 28px);
+    background-size: 2px 100%, 100% 100%; background-position: 46px 0, 0 var(--top, 70px); background-repeat: no-repeat, repeat-y;
+    background-color: var(--paper, var(--stock)); padding-left: 64px; }
+  .tape { position: absolute; width: 96px; height: 26px; top: -12px; left: 50%; translate: -50% 0; rotate: var(--tr, -3deg);
+          background: repeating-linear-gradient(45deg, var(--t1) 0 8px, var(--t2) 8px 16px); opacity: .9;
+          box-shadow: 0 1px 2px rgba(46,42,79,.15); }
+  .label { display: inline-block; font: 600 22px/1.2 var(--hand); padding: 6px 18px 7px; rotate: -1.5deg; margin: 64px 0 22px;
+           background: repeating-linear-gradient(90deg, var(--t1, #ffd8e6) 0 10px, var(--t2, #ffe6ef) 10px 20px);
+           box-shadow: 0 1px 2px rgba(46,42,79,.18); }
+  .note { font: 400 18px/1.45 var(--hand); }
+  .stamp { display: inline-block; font: 700 20px/1 var(--typed); letter-spacing: .08em; color: var(--berry);
+           border: 3px double var(--berry); border-radius: 6px; padding: 6px 10px 5px; rotate: -11deg; opacity: .85; }
+
+  /* Borrower's card */
+  .borrower { --paper: var(--butter); max-width: 620px; margin: 6px auto 0; --r: -0.6deg; --top: 96px; }
+  .borrower h1 { font: 800 clamp(30px, 6vw, 46px)/1.05 var(--hand); margin: 4px 0 26px; }
+  .field { display: grid; grid-template-columns: 9.5em 1fr; }
+  .field span:first-child { color: var(--soft); }
+  @media (max-width: 520px) { .field { grid-template-columns: 1fr; } .field span:first-child { font-size: 14px; line-height: 20px; margin-top: 8px; } }
+
+  /* View switch: two library card tabs */
+  .views { display: flex; gap: 8px; justify-content: center; margin: 56px 0 0; }
+  .views button { font: 600 18px var(--hand); color: var(--ink); background: var(--blue); border: 0; cursor: pointer;
+                  padding: 8px 22px 10px; border-radius: 10px 10px 3px 3px; box-shadow: 0 6px 12px -10px rgba(46,42,79,.6); }
+  .views button[aria-pressed="true"] { background: var(--pink); translate: 0 -4px; }
+
+  /* Spines on a pastel shelf */
+  .shelf { margin-top: 30px; overflow-x: auto; padding-top: 12px; }
+  .books { display: flex; align-items: flex-end; gap: 5px; padding: 0 14px; width: max-content; min-width: 100%; min-height: 240px; }
+  .spine { position: relative; display: flex; justify-content: center; text-decoration: none; width: var(--w); height: var(--h);
+           background: var(--c); color: var(--ink); border-radius: 4px 4px 1px 1px; padding: 14px 0;
+           box-shadow: inset -4px 0 0 rgba(46,42,79,.08), inset 2px 0 0 rgba(255,255,255,.6); transition: translate .15s; }
+  .spine::before, .spine::after { content: ""; position: absolute; left: 0; right: 0; height: 3px; background: rgba(46,42,79,.14); }
+  .spine::before { top: 8px; } .spine::after { bottom: 26px; }
+  .spine:hover, .spine:focus-visible { translate: 0 -8px; }
+  .spine span { writing-mode: vertical-rl; rotate: 180deg; font: 700 14px/1 var(--typed); white-space: nowrap; overflow: hidden;
+                text-overflow: ellipsis; max-height: calc(var(--h) - 50px); }
+  .spine i { position: absolute; bottom: 6px; font-style: normal; font-size: 12px; color: var(--berry); }
+  .plank { height: 16px; border-radius: 3px; background: linear-gradient(#f5d9c4, #e9c2a6); box-shadow: 0 8px 14px -10px rgba(46,42,79,.6); }
+  .shelf-note { text-align: center; margin: 16px 0 0; }
   @media (prefers-reduced-motion: no-preference) {
-    .spine { animation: rise .55s cubic-bezier(.2,.9,.3,1.2) backwards; animation-delay: calc(var(--i) * 45ms); }
-    @keyframes rise { from { transform: translateY(40px) scaleY(.6); opacity: 0; } }
+    .spine, .pol { animation: drop .5s cubic-bezier(.2,.9,.3,1.25) backwards; animation-delay: calc(var(--i) * 40ms); }
+    @keyframes drop { from { translate: 0 -24px; opacity: 0; } }
   }
 
-  /* Year grid */
+  /* Covers as taped polaroids */
+  .covers { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 34px 22px; margin-top: 40px; }
+  @media (max-width: 480px) { .covers { grid-template-columns: repeat(2, 1fr); } }
+  .pol { position: relative; display: block; text-decoration: none; background: #fff; padding: 9px 9px 0; rotate: var(--r);
+         box-shadow: 0 12px 20px -14px rgba(46,42,79,.6); transition: rotate .15s, translate .15s; }
+  .pol:hover, .pol:focus-visible { rotate: 0deg; translate: 0 -5px; }
+  .pol .tape { width: 70px; height: 22px; top: -11px; }
+  .art { position: relative; aspect-ratio: 2 / 3; background: var(--c); overflow: hidden; }
+  .art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .art .plain { padding: 12px 10px; font: 700 15px/1.2 var(--typed); }
+  .art .plain small { display: block; font-weight: 400; margin-top: 8px; font-size: 13px; }
+  .pol .stamp { position: absolute; right: -6px; bottom: 54px; font-size: 14px; padding: 4px 7px 3px; background: rgba(255,255,255,.75); }
+  .pol .cap { display: block; font: 400 16px/1.2 var(--hand); padding: 10px 2px 12px; text-align: center; }
+
+  /* Date due card */
+  .due { --paper: var(--pink); }
+  .due h3 { font: 700 18px var(--typed); border-bottom: 2px solid var(--berry); padding-bottom: 6px; margin-bottom: 14px; }
   .year { overflow-x: auto; }
   .year svg { display: block; }
-  .key { display: flex; gap: 5px; align-items: center; color: var(--soft); font-size: 13px; margin-top: 10px; }
-  .key i { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+  .key { display: flex; gap: 6px; align-items: center; font-size: 14px; color: var(--soft); margin-top: 10px; }
+  .key i { width: 12px; height: 12px; border-radius: 2px; display: inline-block; }
 
-  /* Habits */
-  .habits { display: grid; grid-template-columns: 1.3fr 1fr; gap: 40px; align-items: start; }
-  @media (max-width: 700px) { .habits { grid-template-columns: 1fr; gap: 8px; } }
-  .week { display: flex; gap: 8px; align-items: flex-end; height: 170px; }
-  .week div { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; gap: 6px; }
-  .week b { width: 100%; border-radius: 10px 10px 4px 4px; min-height: 4px; }
-  .week small, .times small { color: var(--soft); font-size: 13px; }
-  .times { display: grid; gap: 10px; }
-  .times div { display: grid; grid-template-columns: 90px 1fr auto; gap: 12px; align-items: center; }
-  .times .t { height: 18px; background: var(--track); border-radius: 99px; overflow: hidden; }
-  .times .t i { display: block; height: 100%; border-radius: 99px; }
+  /* Habit cards with highlighter strokes */
+  .pair { display: grid; grid-template-columns: 1.2fr 1fr; gap: 28px; align-items: start; }
+  @media (max-width: 720px) { .pair { grid-template-columns: 1fr; } }
+  .pair .card:first-child { --r: .5deg; --paper: var(--blue); }
+  .pair .card:last-child { --r: -.8deg; --paper: var(--lilac); }
+  .pair h3, .chart-card h3 { font: 700 18px var(--typed); margin-bottom: 14px; }
+  .week { display: flex; gap: 8px; align-items: flex-end; height: 160px; }
+  .week div { flex: 1; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 4px; }
+  .week b { width: 78%; min-height: 3px; background: var(--hc); border-radius: 8px 3px 6px 2px / 4px 8px 3px 6px; }
+  .week small { font-size: 14px; }
+  .times { display: grid; gap: 12px; }
+  .times div { display: grid; grid-template-columns: 6.5em 1fr; gap: 10px; align-items: center; font-size: 15px; }
+  .times b { display: block; height: 20px; background: var(--hc); border-radius: 10px 3px 8px 3px / 4px 9px 3px 7px; min-width: 4px; }
 
-  /* Book page */
-  .back { display: inline-block; font-weight: 700; text-decoration: none; margin-bottom: 22px; }
+  /* Catalog card (book page) */
+  .back { display: inline-block; font: 600 18px var(--hand); text-decoration: none; margin-bottom: 26px; }
   .back:hover { text-decoration: underline; }
-  .cover { background: var(--c); color: #1c1638; border-radius: 28px 28px 28px 6px; padding: 34px 30px 30px; }
-  .cover.dark { color: #fff; }
-  .cover h1 { font-size: clamp(38px, 7vw, 72px); }
-  .cover p { margin: 10px 0 0; font-size: 19px; }
-  .done { display: inline-block; margin-top: 16px; background: var(--ink); color: var(--page); font-weight: 700;
-          border-radius: 99px; padding: 4px 14px; font-size: 15px; }
-  .facts { font-size: 21px; line-height: 1.5; max-width: 32em; margin: 28px 0 0; }
-  .facts b { font-weight: 800; }
+  .catalog { --paper: var(--stock); --top: 124px; display: grid; grid-template-columns: 1fr auto; gap: 18px; }
+  .catalog .call { position: absolute; left: 10px; top: 22px; width: 32px; font: 700 13px/18px var(--typed); color: var(--soft); text-align: center; }
+  .catalog h1 { font: 700 clamp(26px, 5vw, 40px)/1.15 var(--typed); margin: 4px 0 10px; }
+  .catalog .by { font: 400 19px var(--hand); margin: 0 0 22px; }
+  .catalog .pol { width: clamp(96px, 22vw, 150px); rotate: 3deg; align-self: start; }
+  .catalog .stamp { position: absolute; right: 22px; bottom: 26px; }
+  @media (max-width: 560px) { .catalog { grid-template-columns: 1fr; } .catalog .pol { justify-self: end; margin-top: -8px; } }
+  .story { font: 400 20px/1.55 var(--hand); max-width: 34em; margin: 34px 4px 0; }
+  .story b { font-weight: 800; }
+  .chart-card { --paper: var(--butter); --r: .3deg; }
   .chart svg { width: 100%; height: auto; display: block; }
-  .tip { position: fixed; pointer-events: none; background: var(--ink); color: var(--page); font-size: 14px; font-weight: 600;
-         padding: 5px 10px; border-radius: 8px; opacity: 0; white-space: nowrap; z-index: 2; }
-  footer { color: var(--soft); font-size: 14px; margin-top: 64px; }
-
-  /* Spines / Covers switch */
-  .views { display: inline-flex; gap: 4px; margin-top: 30px; padding: 4px; background: var(--track); border-radius: 99px; }
-  .views button { font: 700 15px "Bricolage Grotesque", system-ui, sans-serif; color: var(--ink); background: none; border: 0;
-                  padding: 7px 18px; border-radius: 99px; cursor: pointer; }
-  .views button[aria-pressed="true"] { background: var(--ink); color: var(--page); }
-  .views button:focus-visible { outline: 3px solid var(--sky); outline-offset: 2px; }
-
-  /* Covers */
-  .covers { display: grid; grid-template-columns: repeat(auto-fill, minmax(124px, 1fr)); gap: 26px 20px; margin-top: 28px; }
-  @media (max-width: 480px) { .covers { grid-template-columns: repeat(3, 1fr); gap: 20px 12px; } }
-  .cv { text-decoration: none; display: block; }
-  .art { position: relative; aspect-ratio: 2 / 3; border-radius: 4px 10px 10px 4px; overflow: hidden; background: var(--c);
-         color: #1c1638; box-shadow: 6px 6px 0 var(--c2); transition: transform .15s; }
-  .cv:hover .art, .cv:focus-visible .art { transform: rotate(-2deg) translateY(-4px); }
-  .art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-  .art .plain { padding: 12px 10px; font-weight: 800; font-size: 16px; line-height: 1.05; font-variation-settings: "wdth" 80; }
-  .art .plain small { display: block; font-weight: 500; font-size: 12px; margin-top: 6px; }
-  .art.dark .plain { color: #fff; }
-  .art .star { position: absolute; top: 6px; right: 6px; width: 26px; height: 26px; border-radius: 50%; background: var(--sun);
-               color: #1c1638; display: grid; place-items: center; font-size: 14px; box-shadow: 0 0 0 2px var(--page); }
-  .cv .when { display: block; margin-top: 12px; font-size: 14px; font-weight: 700; }
-  .cv .when small { display: block; font-weight: 400; color: var(--soft); }
-  .cover.with-art { display: flex; gap: 24px; align-items: flex-end; justify-content: space-between; }
-  .cover.with-art img { width: clamp(84px, 18vw, 140px); aspect-ratio: 2 / 3; object-fit: cover; border-radius: 4px 10px 10px 4px;
-                        box-shadow: 6px 6px 0 rgba(28,22,56,.25); flex: none; }
+  .hint { color: var(--soft); font-size: 15px; line-height: 22px; }
+  .wall-text, .back { color: var(--wall-ink); }  /* text sitting on the wall, not on paper */
+  .tip { position: fixed; pointer-events: none; background: var(--ink); color: #fff; font: 400 14px/1.3 var(--typed);
+         padding: 5px 9px; border-radius: 4px; opacity: 0; white-space: nowrap; z-index: 2; }
+  footer { font: 400 15px var(--hand); color: var(--wall-soft); text-align: center; margin-top: 70px; }
 </style>
 </head>
 <body>
-<main id="app"><p class="hint">Getting your shelf…</p></main>
+<main id="app"><p class="wall-text note">Pulling your card from the drawer…</p></main>
 <div class="tip" id="tip" aria-hidden="true"></div>
 <script>
 const $ = (s) => document.querySelector(s);
@@ -124,8 +150,10 @@ const fmt = (iso, opt = { month: "short", day: "numeric" }) => new Date(iso + "T
 const addDays = (iso, n) => { const d = new Date(iso + "T12:00"); d.setDate(d.getDate() + n); return d.toISOString().slice(0, 10); };
 const between = (a, b) => Math.round((new Date(b + "T12:00") - new Date(a + "T12:00")) / 864e5);
 const WEEK = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"], TIMES = ["Morning", "Afternoon", "Evening", "Night"];
-const COLORS = ["tomato", "sun", "grass", "sky", "gum", "grape", "tang", "teal"];
-const DARK = new Set(["sky", "grape", "teal"]);  // white titles read better on these
+const COLORS = ["peach", "sun", "mint", "sky", "plum", "rose", "sage", "aqua"];
+const TAPES = [["#ffd1e0", "#ffe4ee"], ["#cfe8ff", "#e4f2ff"], ["#d9f2d8", "#ebf8ea"], ["#fff0b8", "#fff7d9"], ["#e6dcff", "#f1ebff"]];
+const tape = (i, rot) => `--t1:${TAPES[i % TAPES.length][0]};--t2:${TAPES[i % TAPES.length][1]};--tr:${rot}deg`;
+const wobble = (i) => [-2.5, 1.8, -1, 2.6, -1.8, 1][i % 6];
 const hashColor = (key) => [...key].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7) % COLORS.length;
 let PICKED = {};
 // Each book keeps a hashed color, nudged along the palette so no two shelf neighbours match.
@@ -134,6 +162,11 @@ function pickColors(books) {
   for (const b of books) { let c = hashColor(b.key); while (c === prev || c === prev2) c = (c + 1) % COLORS.length; PICKED[b.key] = COLORS[c]; prev2 = prev; prev = c; }
 }
 const colorOf = (key) => PICKED[key] || COLORS[hashColor(key)];
+const callNumber = (author) => (author.includes(",") ? author : author.split(" ").pop() || "").replace(/[^A-Za-z]/g, "").slice(0, 3).toUpperCase() || "FIC";
+const coverUrl = (id) => `https://covers.openlibrary.org/b/id/${id}-M.jpg?default=false`;
+
+let VIEW = "spines";
+try { VIEW = localStorage.getItem("view") === "covers" ? "covers" : "spines"; } catch {}
 
 function tips(root) {
   const tip = $("#tip");
@@ -152,33 +185,30 @@ function streakNow(days, today) {
   return n;
 }
 
-const coverUrl = (id) => `https://covers.openlibrary.org/b/id/${id}-M.jpg?default=false`;
-let VIEW = "spines";
-try { VIEW = localStorage.getItem("view") === "covers" ? "covers" : "spines"; } catch {}
-
-function coverGrid(books) {
-  return `<div class="covers">${books.map((b) => {
-    const c = colorOf(b.key), next = COLORS[(COLORS.indexOf(c) + 3) % COLORS.length];
-    // The plain cover sits underneath; a missing image removes itself and leaves it showing.
-    return `<a class="cv" href="#/${encodeURIComponent(b.key)}" aria-label="${esc(b.title)}, ${words(b.seconds)}${b.finished ? ", finished" : ""}">
-      <div class="art${DARK.has(c) ? " dark" : ""}" style="--c:var(--${c});--c2:var(--${next})">
-        <div class="plain" aria-hidden="true">${esc(b.title)}${b.author ? `<small>${esc(b.author)}</small>` : ""}</div>
-        ${b.cover ? `<img src="${coverUrl(b.cover)}" alt="" loading="lazy" onerror="this.remove()">` : ""}
-        ${b.finished ? '<span class="star" aria-hidden="true">★</span>' : ""}
-      </div>
-      <span class="when">${hm(b.seconds)}<small>${b.finished ? "finished" : "reading"}</small></span></a>`;
-  }).join("")}</div>`;
+function polaroid(b, i, opts = {}) {
+  const c = colorOf(b.key);
+  // The plain cover sits underneath; a missing image removes itself and leaves it showing.
+  return `<a class="pol" href="#/${encodeURIComponent(b.key)}" style="--r:${opts.rot ?? wobble(i)}deg;--i:${i}"
+      aria-label="${esc(b.title)}, ${words(b.seconds)}${b.finished ? ", finished" : ""}">
+    <span class="tape" style="${tape(i, -4 + (i % 3) * 3)}"></span>
+    <div class="art" style="--c:var(--${c})">
+      <div class="plain" aria-hidden="true">${esc(b.title)}${b.author ? `<small>${esc(b.author)}</small>` : ""}</div>
+      ${b.cover ? `<img src="${coverUrl(b.cover)}" alt="" loading="lazy" onerror="this.remove()">` : ""}
+    </div>
+    ${b.finished && !opts.noStamp ? '<span class="stamp" aria-hidden="true">FINISHED</span>' : ""}
+    ${opts.noCaption ? "" : `<span class="cap">${hm(b.seconds)}</span>`}</a>`;
 }
+
+function coverWall(books) { return `<div class="covers">${books.map((b, i) => polaroid(b, i)).join("")}</div>`; }
 
 function shelf(books) {
   const max = Math.max(...books.map((b) => b.seconds));
-  const spines = books.map((b, i) => {
-    const c = colorOf(b.key), h = Math.round(110 + 140 * Math.sqrt(b.seconds / max)), w = 34 + (i * 7) % 12;
-    return `<a class="spine${DARK.has(c) ? " dark" : ""}" href="#/${encodeURIComponent(b.key)}" style="--c:var(--${c});--h:${h}px;--w:${w}px;--i:${i}"
-      data-tip="${esc(b.title)} · ${hm(b.seconds)}" aria-label="${esc(b.title)}, ${words(b.seconds)}${b.finished ? ", finished" : ""}">
-      <span>${esc(b.title)}</span>${b.finished ? '<i class="star" aria-hidden="true">★</i>' : ""}</a>`;
-  }).join("");
-  return `<div class="shelf"><div class="books">${spines}</div><div class="plank"></div></div>`;
+  return `<div class="shelf"><div class="books">${books.map((b, i) => {
+    const h = Math.round(110 + 130 * Math.sqrt(b.seconds / max)), w = 34 + (i * 7) % 12;
+    return `<a class="spine" href="#/${encodeURIComponent(b.key)}" style="--c:var(--${colorOf(b.key)});--h:${h}px;--w:${w}px;--i:${i}"
+      data-tip="${esc(b.title)}, ${hm(b.seconds)}" aria-label="${esc(b.title)}, ${words(b.seconds)}${b.finished ? ", finished" : ""}">
+      <span>${esc(b.title)}</span>${b.finished ? '<i aria-hidden="true">★</i>' : ""}</a>`;
+  }).join("")}</div><div class="plank"></div></div>`;
 }
 
 function year(days, today) {
@@ -191,64 +221,75 @@ function year(days, today) {
   for (let w = 0; w < weeks; w++) for (let r = 0; r < 7; r++) {
     const d = new Date(start); d.setDate(start.getDate() + w * 7 + r);
     if (d > end) continue;
-    const iso = d.toISOString().slice(0, 10), s = days[iso] || 0, x = w * (cell + gap) + 30, y = r * (cell + gap) + 20;
-    cells += `<rect x="${x}" y="${y}" width="${cell}" height="${cell}" rx="4" fill="${s ? `var(--heat${lv(s)})` : "var(--track)"}" data-tip="${fmt(iso)} · ${s ? hm(s) : "no reading"}"/>`;
+    const iso = d.toISOString().slice(0, 10), s = days[iso] || 0, x = w * (cell + gap) + 32, y = r * (cell + gap) + 20;
+    cells += `<rect x="${x}" y="${y}" width="${cell}" height="${cell}" rx="2" fill="${s ? `var(--heat${lv(s)})` : "rgba(46,42,79,.07)"}" data-tip="${fmt(iso)}: ${s ? hm(s) : "no reading"}"/>`;
     if (r === 0 && d.getMonth() !== last && (w > 2 || d.getDate() <= 7)) {
-      last = d.getMonth(); months += `<text x="${x}" y="12" font-size="12" fill="var(--soft)">${fmt(iso, { month: "short" })}</text>`;
+      last = d.getMonth(); months += `<text x="${x}" y="12" font-size="12" fill="var(--soft)" font-family="Courier Prime, monospace">${fmt(iso, { month: "short" })}</text>`;
     }
   }
-  const rows = ["Mon", "", "Wed", "", "Fri", "", ""].map((t, r) => t && `<text x="0" y="${r * (cell + gap) + 31}" font-size="11" fill="var(--soft)">${t}</text>`).join("");
-  return `<svg width="${weeks * (cell + gap) + 30}" height="${7 * (cell + gap) + 20}" role="img" aria-label="Reading by day over the past year">${months}${rows}${cells}</svg>`;
+  const rows = ["Mon", "", "Wed", "", "Fri", "", ""].map((t, r) => t && `<text x="0" y="${r * (cell + gap) + 31}" font-size="11" fill="var(--soft)" font-family="Courier Prime, monospace">${t}</text>`).join("");
+  return `<svg width="${weeks * (cell + gap) + 32}" height="${7 * (cell + gap) + 20}" role="img" aria-label="Reading by day over the past year">${months}${rows}${cells}</svg>`;
 }
 
+const HL = ["peach", "sun", "mint", "sky", "plum", "rose", "aqua"];
 function weekBars(byDay) {
   const max = Math.max(1, ...WEEK.map((d) => byDay[d] || 0));
-  return `<div class="week">${WEEK.map((d, i) => `<div data-tip="${d} · ${hm(byDay[d] || 0)}">
-    <b style="height:${((byDay[d] || 0) / max) * 100}%;background:var(--${COLORS[i]})"></b><small>${d}</small></div>`).join("")}</div>`;
+  return `<div class="week">${WEEK.map((d, i) => `<div data-tip="${d}: ${hm(byDay[d] || 0)}">
+    <b style="height:${((byDay[d] || 0) / max) * 100}%;--hc:var(--${HL[i]})"></b><small>${d}</small></div>`).join("")}</div>`;
 }
-
 function timeBars(byTime) {
-  const max = Math.max(1, ...TIMES.map((t) => byTime[t] || 0)), c = ["sun", "tang", "gum", "grape"];
-  return `<div class="times">${TIMES.map((t, i) => `<div><small>${t}</small>
-    <span class="t"><i style="width:${((byTime[t] || 0) / max) * 100}%;background:var(--${c[i]})"></i></span><small>${hm(byTime[t] || 0)}</small></div>`).join("")}</div>`;
+  const max = Math.max(1, ...TIMES.map((t) => byTime[t] || 0)), c = ["sun", "peach", "rose", "plum"];
+  return `<div class="times">${TIMES.map((t, i) => `<div data-tip="${t}: ${hm(byTime[t] || 0)}"><span>${t}</span>
+    <b style="width:${((byTime[t] || 0) / max) * 100}%;--hc:var(--${c[i]})"></b></div>`).join("")}</div>`;
 }
-
-function topOf(obj, names) { return names.reduce((a, b) => ((obj[b] || 0) > (obj[a] || 0) ? b : a)); }
+const topOf = (obj, names) => names.reduce((a, b) => ((obj[b] || 0) > (obj[a] || 0) ? b : a));
 
 function home(data) {
   const g = data.global_stats, today = data.taken_at.slice(0, 10), days = data.days;
   const readDays = Object.keys(days).filter((d) => days[d]).sort();
   const lastRead = readDays[readDays.length - 1];
   const week = [...Array(7)].reduce((s, _, i) => s + (days[addDays(today, -i)] || 0), 0);
-  const streak = streakNow(days, today), night = topOf(g.time_of_day, TIMES), fav = topOf(g.weekday, WEEK);
-  const favNames = { Mon: "Mondays", Tue: "Tuesdays", Wed: "Wednesdays", Thu: "Thursdays", Fri: "Fridays", Sat: "Saturdays", Sun: "Sundays" };
+  const streak = streakNow(days, today), when = topOf(g.time_of_day, TIMES).toLowerCase(), fav = topOf(g.weekday, WEEK);
+  const dayName = { Mon: "Mondays", Tue: "Tuesdays", Wed: "Wednesdays", Thu: "Thursdays", Fri: "Fridays", Sat: "Saturdays", Sun: "Sundays" }[fav];
+  const field = (k, v) => `<div class="field"><span>${k}</span><span>${v}</span></div>`;
   return `
-    <h1>Syna's<br>shelf</h1>
-    <p class="lede"><b>${words(g.seconds)}</b> of reading across <b>${data.books.length} books</b>, ${g.finished} of them finished.
-      ${streak ? `You're on a <b>${streak}-day streak</b>.` : lastRead ? `Last read on ${fmt(lastRead)}.` : ""}
-      ${week ? `This week so far: <b>${hm(week)}</b>.` : ""} Your longest streak is ${g.longest_streak} days.</p>
+    <section class="card ruled borrower" aria-label="Reading summary">
+      <span class="tape" style="${tape(0, -3)}"></span>
+      <h1>Syna's library card</h1>
+      ${field("Time read", words(g.seconds))}
+      ${field("Books", `${data.books.length}, ${g.finished} finished`)}
+      ${field("This week", week ? hm(week) : "nothing yet")}
+      ${field("Streak", streak ? `${streak} day${streak === 1 ? "" : "s"}` : lastRead ? `last read ${fmt(lastRead)}` : "none yet")}
+      ${field("Best streak", `${g.longest_streak} days`)}
+    </section>
+
     <div class="views" role="group" aria-label="Shelf view">
-      <button type="button" data-view="spines" aria-pressed="${VIEW === "spines"}">Spines</button>
+      <button type="button" data-view="spines" aria-pressed="${VIEW === "spines"}">On the shelf</button>
       <button type="button" data-view="covers" aria-pressed="${VIEW === "covers"}">Covers</button>
     </div>
-    ${VIEW === "covers" ? coverGrid(data.books)
-      : `${shelf(data.books)}<p class="hint" style="margin-top:12px">Taller spines got more of your time. Stars are finished books. Tap one to open it.</p>`}
+    ${VIEW === "covers" ? coverWall(data.books)
+      : `${shelf(data.books)}<p class="note wall-text shelf-note">Taller books got more of your time. ★ means finished. Tap any book.</p>`}
 
-    <h2>Your reading year</h2>
-    <p class="hint">${readDays.length} days with reading so far.</p>
-    <div class="year">${year(days, today)}</div>
-    <div class="key">less ${["track", "heat1", "heat2", "heat3", "heat4"].map((c) => `<i style="background:var(--${c})"></i>`).join("")} more</div>
+    <div><span class="label" style="${tape(1, 0)}">Date due</span></div>
+    <section class="card due" style="--r:-.4deg">
+      <h3>${readDays.length} days with reading</h3>
+      <div class="year">${year(days, today)}</div>
+      <div class="key">less ${["", "1", "2", "3", "4"].map((l) => `<i style="background:${l ? `var(--heat${l})` : "rgba(46,42,79,.07)"}"></i>`).join("")} more</div>
+    </section>
 
-    <h2>When you read</h2>
-    <p class="hint">Mostly on ${favNames[fav]}, and mostly in the ${night.toLowerCase()}.</p>
-    <div class="habits">${weekBars(g.weekday)}<div>${timeBars(g.time_of_day)}
-      <p class="hint" style="margin-top:12px">Time of day only counts reading since CrossInk.</p></div></div>
-    <footer>Updated ${new Date(data.taken_at).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" })}</footer>`;
+    <div><span class="label" style="${tape(2, 0)}">When you read</span></div>
+    <div class="pair">
+      <section class="card"><h3>Day of the week</h3>${weekBars(g.weekday)}</section>
+      <section class="card"><h3>Time of day</h3>${timeBars(g.time_of_day)}
+        <p class="hint" style="margin:14px 0 0">Counts reading since CrossInk.</p></section>
+    </div>
+    <p class="note wall-text" style="margin:26px 4px 0">You read most on ${dayName}, and mostly in the ${when}.</p>
+    <footer>Last checked out ${new Date(data.taken_at).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" })}</footer>`;
 }
 
 function chart(history, color) {
   const ds = Object.keys(history).sort();
-  if (!ds.length) return `<p class="hint">No day-by-day reading recorded for this book yet. Sync after you read and it'll fill in here.</p>`;
+  if (!ds.length) return `<p class="hint">Nothing dated for this book yet. Read, sync, and it'll fill in here.</p>`;
   const lastDay = ds[ds.length - 1], first = between(ds[0], lastDay) < 13 ? addDays(lastDay, -13) : ds[0];  // at least two weeks wide
   const n = between(first, lastDay) + 1, small = innerWidth < 640;
   const W = small ? 360 : 760, H = small ? 150 : 200, slot = W / n, bw = Math.max(3, slot - (n > 40 ? 1 : 4));
@@ -256,46 +297,57 @@ function chart(history, color) {
   let bars = "";
   for (let i = 0; i < n; i++) {
     const d = addDays(first, i), s = history[d] || 0, h = s ? Math.max(4, (s / max) * (H - 34)) : 0;
-    bars += `<rect x="${i * slot}" y="${H - 20 - h}" width="${bw}" height="${h}" rx="${Math.min(6, bw / 2)}" fill="var(--${color})" data-tip="${fmt(d)} · ${s ? hm(s) : "—"}"/>`;
+    bars += `<rect x="${i * slot}" y="${H - 20 - h}" width="${bw}" height="${h}" rx="${Math.min(4, bw / 2)}" fill="var(--${color})" stroke="rgba(46,42,79,.25)" data-tip="${fmt(d)}: ${s ? hm(s) : "none"}"/>`;
   }
+  const t = (x, a, s) => `<text x="${x}" y="${H - 2}" font-size="13" fill="var(--soft)" font-family="Courier Prime, monospace" text-anchor="${a}">${s}</text>`;
   return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Minutes read per day">
-    <line x1="0" x2="${W}" y1="${H - 19}" y2="${H - 19}" stroke="var(--track)" stroke-width="2"/>${bars}
-    <text x="0" y="${H - 2}" font-size="13" fill="var(--soft)">${fmt(first)}</text>
-    <text x="${W}" y="${H - 2}" font-size="13" fill="var(--soft)" text-anchor="end">${fmt(lastDay)}</text></svg>`;
+    <line x1="0" x2="${W}" y1="${H - 19}" y2="${H - 19}" stroke="var(--rule)" stroke-width="2"/>${bars}${t(0, "start", fmt(first))}${t(W, "end", fmt(lastDay))}</svg>`;
 }
 
 function bookPage(data, b) {
   const c = colorOf(b.key), tracked = Object.values(b.history).reduce((a, v) => a + v, 0);
-  const sittings = b.sessions ? `in <b>${b.sessions} sitting${b.sessions === 1 ? "" : "s"}</b>, about ${hm(b.seconds / b.sessions)} each` : "";
   const span = b.started && b.finished_on ? between(b.started, b.finished_on) + 1 : null;
-  const lines = [
-    `You've spent <b>${words(b.seconds)}</b> with this one${sittings ? ", " + sittings : ""}.`,
-    b.started ? (span ? `You started on ${fmt(b.started)} and finished ${span === 1 ? "the same day" : `${span} days later, on ${fmt(b.finished_on)}`}.`
-                      : `You started on ${fmt(b.started, { month: "long", day: "numeric", year: "numeric" })}.`) : "",
-    !b.finished && b.seconds_left ? `The reader thinks you have about <b>${hm(b.seconds_left)}</b> left.` : "",
-    b.pages >= 20 ? `That's ${b.pages} page turns, roughly ${Math.round(b.pages / (b.seconds / 3600))} an hour.` : "",
+  const field = (k, v) => v ? `<div class="field"><span>${k}</span><span>${v}</span></div>` : "";
+  const story = [
+    `You've spent <b>${words(b.seconds)}</b> with this one${b.sessions ? `, over ${b.sessions} sitting${b.sessions === 1 ? "" : "s"}` : ""}.`,
+    span ? (span === 1 ? "You read it all in one day!" : `It took you ${span} days from first page to last.`) : "",
+    !b.finished && b.seconds_left ? `About <b>${hm(b.seconds_left)}</b> to go.` : "",
   ].filter(Boolean).join(" ");
   const enough = (o) => Object.values(o).reduce((a, v) => a + v, 0) >= b.seconds * 0.5;
   return `
     <a class="back" href="#/">← Back to the shelf</a>
-    <section class="cover${DARK.has(c) ? " dark" : ""}${b.cover ? " with-art" : ""}" style="--c:var(--${c})">
-      <div><h1>${esc(b.title)}</h1>${b.author ? `<p>${esc(b.author)}</p>` : ""}${b.finished ? '<span class="done">★ Finished</span>' : ""}</div>
-      ${b.cover ? `<img src="${coverUrl(b.cover)}" alt="Cover of ${esc(b.title)}" onerror="this.remove()">` : ""}
+    <section class="card ruled catalog">
+      <span class="call" aria-label="Call number">FIC<br>${esc(callNumber(b.author || ""))}</span>
+      <div>
+        <h1>${esc(b.title)}</h1>
+        ${b.author ? `<p class="by">by ${esc(b.author)}</p>` : ""}
+        ${field("Time read", hm(b.seconds))}
+        ${field("Sittings", b.sessions && `${b.sessions}, about ${hm(b.seconds / b.sessions)} each`)}
+        ${field("Started", b.started && fmt(b.started, { month: "short", day: "numeric", year: "numeric" }))}
+        ${field("Finished", b.finished_on && fmt(b.finished_on, { month: "short", day: "numeric", year: "numeric" }))}
+        ${field("Pages turned", b.pages >= 20 && b.pages)}
+      </div>
+      ${polaroid(b, 2, { rot: 3, noStamp: true, noCaption: true })}
+      ${b.finished ? '<span class="stamp">FINISHED</span>' : ""}
     </section>
-    <p class="facts">${lines}</p>
-    <h2>Day by day</h2>
-    ${tracked && tracked < b.seconds * 0.95 ? `<p class="hint">Showing ${hm(tracked)} of ${hm(b.seconds)}. Older reading on this book was saved without dates.</p>` : ""}
-    <div class="chart">${chart(b.history, c)}</div>
-    ${enough(b.weekday) || enough(b.time_of_day) ? `<h2>When you read it</h2><div class="habits">
-      ${enough(b.weekday) ? weekBars(b.weekday) : "<div></div>"}${enough(b.time_of_day) ? `<div>${timeBars(b.time_of_day)}</div>` : ""}</div>` : ""}
-    <footer>Updated ${new Date(data.taken_at).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" })}</footer>`;
+    <p class="story wall-text">${story}</p>
+
+    <div><span class="label" style="${tape(3, 0)}">Day by day</span></div>
+    <section class="card chart-card">
+      ${tracked && tracked < b.seconds * 0.95 ? `<p class="hint" style="margin:0 0 12px">Showing ${hm(tracked)} of ${hm(b.seconds)}. Older reading on this book was saved without dates.</p>` : ""}
+      <div class="chart">${chart(b.history, c)}</div>
+    </section>
+    ${enough(b.weekday) || enough(b.time_of_day) ? `<div><span class="label" style="${tape(4, 0)}">When you read it</span></div><div class="pair">
+      ${enough(b.weekday) ? `<section class="card"><h3>Day of the week</h3>${weekBars(b.weekday)}</section>` : "<div></div>"}
+      ${enough(b.time_of_day) ? `<section class="card"><h3>Time of day</h3>${timeBars(b.time_of_day)}</section>` : ""}</div>` : ""}
+    <footer>Last checked out ${new Date(data.taken_at).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" })}</footer>`;
 }
 
 fetch("data.json", { cache: "no-store" }).then((r) => r.json()).then((data) => {
   pickColors(data.books);
   const render = (keepScroll) => {
     const k = decodeURIComponent(location.hash.replace(/^#\/?/, "")), b = data.books.find((x) => x.key === k);
-    document.title = b ? `${b.title} · Syna's Shelf` : "Syna's Shelf";
+    document.title = b ? `${b.title}, on Syna's Library Card` : "Syna's Library Card";
     $("#app").innerHTML = b ? bookPage(data, b) : home(data);
     const y = $(".year"); if (y) y.scrollLeft = y.scrollWidth;  // open the year grid on recent months
     if (!keepScroll) scrollTo(0, 0);
@@ -308,7 +360,7 @@ fetch("data.json", { cache: "no-store" }).then((r) => r.json()).then((data) => {
   });
   tips($("#app"));
   addEventListener("hashchange", () => render()); render();
-}).catch(() => ($("#app").innerHTML = `<h1>Syna's<br>shelf</h1><p class="lede">No stats yet. Open File Transfer on the reader and run Sync Reader.</p>`));
+}).catch(() => ($("#app").innerHTML = `<p class="note wall-text">No card on file yet. Open File Transfer on the reader and run Sync Reader.</p>`));
 </script>
 </body>
 </html>
