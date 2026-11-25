@@ -26,7 +26,7 @@ jobs:
         run: python -m unittest discover tests
       - name: Ingest uploads and build
         run: |
-          shopt -s nullglob
+          shopt -s nullglob dotglob  # dotglob: a Shortcut with an empty date variable uploads "inbox/.zip"
           files=(inbox/*.zip)
           if [ ${#files[@]} -gt 0 ]; then
             python -m stats.pipeline ingest "${files[@]}"

@@ -89,7 +89,11 @@ def ingest(zip_paths):
         for bid, (s, meta) in raw.items():
             if not s["seconds"]:
                 continue
-            title, author = meta or names.get(bid) or (f"Unknown book ({bid})", "")
+            known = meta or names.get(bid)
+            if not known and s["seconds"] < 600:
+                continue  # opened for a moment: the reader saved no title, and it isn't worth a row
+            title, author = known or (f"Unknown book ({bid})", "")
+            title = re.sub(r"\s*(\([^)]*\)|:\s.*)$", "", title)  # drop subtitles: "The Hunger Games: The First Book…"
             names.setdefault(bid, [title, author])
             k = key(title)
             if k in books:  # same book under two cache folders (it was moved): keep the bigger record
