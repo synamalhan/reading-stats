@@ -1,0 +1,51 @@
+name: Update stats
+
+on:
+  push:
+    paths: ["inbox/**"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: stats
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Test
+        run: python -m unittest discover tests
+      - name: Ingest uploads and build
+        run: |
+          shopt -s nullglob
+          files=(inbox/*.zip)
+          if [ ${#files[@]} -gt 0 ]; then
+            python -m stats.pipeline ingest "${files[@]}"
+            git rm -q "${files[@]}"
+          fi
+          python -m stats.pipeline build
+      - name: Save history
+        run: |
+          git config user.name "stats-bot"
+          git config user.email "stats-bot@users.noreply.github.com"
+          git add data
+          git diff --cached --quiet || git commit -qm "Ingest reader upload"
+          git push
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - id: deploy
+        uses: actions/deploy-pages@v4

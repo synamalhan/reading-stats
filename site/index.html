@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reading Stats</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --bg: #f6f1e7; --card: #fffdf8; --ink: #2b2620; --muted: #7a6f62; --line: #e6dccb;
+    --accent: #b5562f; --accent-soft: #efd2c2; --good: #4f7a4a;
+    --heat0: #ece4d6; --heat1: #f0c9b3; --heat2: #e09a76; --heat3: #c8693f; --heat4: #93401f;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1b1916; --card: #24211d; --ink: #efe8dc; --muted: #a59a8b; --line: #3a352e;
+      --accent: #e08a5e; --accent-soft: #4a3226; --good: #8fbf88;
+      --heat0: #2f2b26; --heat1: #5a3a2a; --heat2: #8a4f33; --heat3: #c2693f; --heat4: #f0a079;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 Inter, system-ui, sans-serif; }
+  main { max-width: 960px; margin: 0 auto; padding: 28px 16px 64px; }
+  h1, h2, h3 { font-family: Fraunces, Georgia, serif; font-weight: 600; margin: 0; }
+  h1 { font-size: 34px; letter-spacing: -0.01em; }
+  h2 { font-size: 20px; margin: 36px 0 12px; }
+  .sub { color: var(--muted); margin-top: 4px; }
+  a { color: inherit; }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin-top: 22px; }
+  .tile { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; }
+  .tile b { display: block; font: 600 26px/1.2 Fraunces, Georgia, serif; }
+  .tile span { color: var(--muted); font-size: 13px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 640px) { .two { grid-template-columns: 1fr; } h1 { font-size: 28px; } }
+  .heat { overflow-x: auto; }
+  .heat svg { display: block; }
+  .legend { display: flex; gap: 4px; align-items: center; color: var(--muted); font-size: 12px; margin-top: 8px; justify-content: flex-end; }
+  .legend i { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
+  .bars { display: grid; gap: 8px; }
+  .bar { display: grid; grid-template-columns: 78px 1fr 56px; align-items: center; gap: 10px; font-size: 13px; }
+  .bar .track { height: 10px; background: var(--heat0); border-radius: 6px; overflow: hidden; }
+  .bar .fill { height: 100%; background: var(--accent); border-radius: 6px; }
+  .bar .v { color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
+  .books { display: grid; gap: 8px; }
+  .book { display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; align-items: center; text-decoration: none;
+          background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px; }
+  .book:hover { border-color: var(--accent); }
+  .book .t { font-weight: 600; }
+  .book .a { color: var(--muted); font-size: 13px; }
+  .book .h { font: 600 18px Fraunces, Georgia, serif; text-align: right; grid-row: span 2; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 1px 8px; border-radius: 99px;
+           background: var(--accent-soft); color: var(--accent); margin-left: 6px; vertical-align: 2px; }
+  .back { display: inline-block; margin-bottom: 18px; color: var(--muted); text-decoration: none; }
+  .back:hover { color: var(--accent); }
+  .note { color: var(--muted); font-size: 13px; margin-top: 10px; }
+  .timeline svg { width: 100%; height: auto; display: block; }
+  .tip { position: fixed; pointer-events: none; background: var(--ink); color: var(--bg); font-size: 12px;
+         padding: 4px 8px; border-radius: 6px; opacity: 0; transition: opacity .1s; white-space: nowrap; }
+  footer { color: var(--muted); font-size: 12px; margin-top: 40px; }
+</style>
+</head>
+<body>
+<main id="app"><p class="sub">Loading…</p></main>
+<div class="tip" id="tip"></div>
+<script>
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+const hm = (sec) => { const m = Math.round(sec / 60); return m < 60 ? `${m}m` : `${Math.floor(m / 60)}h ${String(m % 60).padStart(2, "0")}m`; };
+const hrs = (sec) => (sec / 3600).toFixed(sec >= 36000 ? 0 : 1);
+const fmtDate = (iso) => iso ? new Date(iso + "T12:00").toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" }) : "—";
+const addDays = (iso, n) => { const d = new Date(iso + "T12:00"); d.setDate(d.getDate() + n); return d.toISOString().slice(0, 10); };
+const daysBetween = (a, b) => Math.round((new Date(b + "T12:00") - new Date(a + "T12:00")) / 864e5);
+
+function tipOn(el) {
+  const tip = $("#tip");
+  el.addEventListener("mousemove", (e) => {
+    const t = e.target.dataset.tip; if (!t) { tip.style.opacity = 0; return; }
+    tip.textContent = t; tip.style.opacity = 1;
+    tip.style.left = Math.min(e.clientX + 12, innerWidth - tip.offsetWidth - 8) + "px"; tip.style.top = e.clientY + 14 + "px";
+  });
+  el.addEventListener("mouseleave", () => (tip.style.opacity = 0));
+}
+
+function streaks(days, today) {
+  const read = new Set(Object.keys(days).filter((d) => days[d] > 0));
+  let cur = 0, d = read.has(today) ? today : addDays(today, -1);
+  while (read.has(d)) { cur++; d = addDays(d, -1); }
+  return cur;
+}
+
+function heatmap(days, today) {
+  const cell = 12, gap = 3, weeks = 53;
+  // Columns are Monday-first weeks; the last column holds today.
+  const end = new Date(today + "T12:00"); const start = new Date(end); start.setDate(end.getDate() - 7 * (weeks - 1) - (end.getDay() + 6) % 7);
+  const vals = Object.values(days).filter((v) => v > 0).sort((a, b) => a - b);
+  const q = (p) => vals.length ? vals[Math.floor(p * (vals.length - 1))] : 1;
+  const cuts = [q(0.25), q(0.5), q(0.8)];
+  const level = (s) => !s ? 0 : s <= cuts[0] ? 1 : s <= cuts[1] ? 2 : s <= cuts[2] ? 3 : 4;
+  let rects = "", months = "", lastMonth = -1;
+  for (let w = 0; w < weeks; w++) for (let r = 0; r < 7; r++) {
+    const d = new Date(start); d.setDate(start.getDate() + w * 7 + r);
+    if (d > end) continue;
+    const iso = d.toISOString().slice(0, 10), s = days[iso] || 0;
+    rects += `<rect x="${w * (cell + gap) + 26}" y="${r * (cell + gap) + 18}" width="${cell}" height="${cell}" rx="3" fill="var(--heat${level(s)})" data-tip="${fmtDate(iso)} · ${s ? hm(s) : "no reading"}"/>`;
+    if (r === 0 && d.getMonth() !== lastMonth && (w > 2 || d.getDate() <= 7)) { lastMonth = d.getMonth(); months += `<text x="${w * (cell + gap) + 26}" y="11" font-size="10" fill="var(--muted)">${d.toLocaleDateString(undefined, { month: "short" })}</text>`; }
+  }
+  const labels = ["Mon", "", "Wed", "", "Fri", "", ""].map((t, r) => t && `<text x="0" y="${r * (cell + gap) + 28}" font-size="10" fill="var(--muted)">${t}</text>`).join("");
+  return `<svg width="${weeks * (cell + gap) + 26}" height="${7 * (cell + gap) + 18}">${months}${labels}${rects}</svg>`;
+}
+
+const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"], TIMES = ["Morning", "Afternoon", "Evening", "Night"];
+function bars(obj, order) {
+  const max = Math.max(1, ...Object.values(obj));
+  return `<div class="bars">${order.map((k) => [k, obj[k] || 0]).map(([k, v]) =>
+    `<div class="bar"><span>${k}</span><div class="track"><div class="fill" style="width:${(v / max) * 100}%"></div></div><span class="v">${hm(v)}</span></div>`).join("")}</div>`;
+}
+
+function timeline(history) {
+  const ds = Object.keys(history).sort();
+  if (!ds.length) return `<p class="note">No day-by-day data for this book yet. It builds up from your next uploads.</p>`;
+  const first = ds[0], n = daysBetween(first, ds[ds.length - 1]) + 1;
+  const W = innerWidth < 640 ? 360 : 640, H = innerWidth < 640 ? 120 : 150, pad = 22, bw = Math.max(2, (W - pad) / n - 2), max = Math.max(...Object.values(history));
+  let out = "";
+  for (let i = 0; i < n; i++) {
+    const d = addDays(first, i), s = history[d] || 0, h = (s / max) * (H - 30);
+    out += `<rect x="${pad + i * ((W - pad) / n)}" y="${H - 18 - h}" width="${bw}" height="${Math.max(h, s ? 2 : 0)}" rx="2" fill="var(--accent)" data-tip="${fmtDate(d)} · ${s ? hm(s) : "—"}"/>`;
+  }
+  out += `<text x="${pad}" y="${H - 3}" font-size="11" fill="var(--muted)">${fmtDate(first)}</text><text x="${W}" y="${H - 3}" font-size="11" fill="var(--muted)" text-anchor="end">${fmtDate(ds[ds.length - 1])}</text>`;
+  out += `<text x="0" y="12" font-size="11" fill="var(--muted)">${hm(max)}</text>`;
+  return `<svg viewBox="0 0 ${W} ${H}">${out}</svg>`;
+}
+
+function overview(data) {
+  const g = data.global_stats, today = data.taken_at.slice(0, 10);
+  const week = [...Array(7)].reduce((s, _, i) => s + (data.days[addDays(today, -i)] || 0), 0);
+  const readDays = Object.values(data.days).filter((v) => v > 0).length;
+  return `
+    <h1>Reading Stats</h1>
+    <p class="sub">Updated ${new Date(data.taken_at).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" })}</p>
+    <div class="tiles">
+      <div class="tile"><b>${hrs(g.seconds)} h</b><span>total reading</span></div>
+      <div class="tile"><b>${g.finished}</b><span>books finished</span></div>
+      <div class="tile"><b>${streaks(data.days, today)}</b><span>day streak</span></div>
+      <div class="tile"><b>${g.longest_streak}</b><span>longest streak</span></div>
+      <div class="tile"><b>${hm(week)}</b><span>last 7 days</span></div>
+      <div class="tile"><b>${hm(readDays ? (g.seconds / readDays) : 0)}</b><span>per reading day</span></div>
+    </div>
+    <h2>The year in reading</h2>
+    <div class="card heat">${heatmap(data.days, today)}
+      <div class="legend">less ${[0, 1, 2, 3, 4].map((l) => `<i style="background:var(--heat${l})"></i>`).join("")} more</div></div>
+    <div class="two" style="margin-top:12px">
+      <div class="card"><h3>By weekday</h3><div style="margin-top:12px">${bars(g.weekday, WEEKDAYS)}</div></div>
+      <div class="card"><h3>By time of day</h3><div style="margin-top:12px">${bars(g.time_of_day, TIMES)}</div>
+        <p class="note">From reading since CrossInk; earlier time isn't split by hour.</p></div>
+    </div>
+    <h2>Books</h2>
+    <div class="books">${data.books.map((b) => `
+      <a class="book" href="#/${encodeURIComponent(b.key)}">
+        <div class="t">${esc(b.title)}${b.finished ? '<span class="badge">finished</span>' : ""}</div>
+        <div class="h">${hm(b.seconds)}</div>
+        <div class="a">${esc(b.author || "")}</div>
+      </a>`).join("")}</div>`;
+}
+
+function bookPage(data, b) {
+  const avg = b.sessions ? b.seconds / b.sessions : 0;
+  const took = b.started && b.finished_on ? daysBetween(b.started, b.finished_on) + 1 : null;
+  const tracked = Object.values(b.history).reduce((a, v) => a + v, 0);
+  const tiles = [
+    [hm(b.seconds), "reading time"], [b.sessions || "—", "sessions"], [avg ? hm(avg) : "—", "avg session"],
+    ...(b.pages >= 20 ? [[b.pages, "page turns"], [Math.round(b.pages / (b.seconds / 3600)), "pages per hour"]] : []),
+    [fmtDate(b.started), "started"], [b.finished ? fmtDate(b.finished_on) : (b.seconds_left ? hm(b.seconds_left) : "—"), b.finished ? "finished" : "time left"],
+  ];
+  if (took) tiles.push([`${took} days`, "start to finish"]);
+  // A split covering under half the book's time (older firmware saved no hours) would mislead.
+  const any = (o) => Object.values(o).reduce((a, v) => a + v, 0) >= b.seconds * 0.5;
+  return `
+    <a class="back" href="#/">← All books</a>
+    <h1>${esc(b.title)}${b.finished ? '<span class="badge">finished</span>' : ""}</h1>
+    <p class="sub">${esc(b.author || "")}</p>
+    <div class="tiles">${tiles.map(([v, l]) => `<div class="tile"><b>${v}</b><span>${l}</span></div>`).join("")}</div>
+    <h2>Day by day</h2>
+    <div class="card timeline">${timeline(b.history)}
+      ${tracked && tracked < b.seconds * 0.95 ? `<p class="note">Shows ${hm(tracked)} of ${hm(b.seconds)}. Older reading on this book was saved without dates.</p>` : ""}</div>
+    ${any(b.weekday) || any(b.time_of_day) ? `<div class="two" style="margin-top:12px">
+      ${any(b.weekday) ? `<div class="card"><h3>By weekday</h3><div style="margin-top:12px">${bars(b.weekday, WEEKDAYS)}</div></div>` : ""}
+      ${any(b.time_of_day) ? `<div class="card"><h3>By time of day</h3><div style="margin-top:12px">${bars(b.time_of_day, TIMES)}</div></div>` : ""}
+    </div>` : ""}`;
+}
+
+fetch("data.json", { cache: "no-store" }).then((r) => r.json()).then((data) => {
+  const render = () => {
+    const k = decodeURIComponent(location.hash.replace(/^#\/?/, ""));
+    const b = data.books.find((x) => x.key === k);
+    $("#app").innerHTML = (b ? bookPage(data, b) : overview(data)) + `<footer>From the reader's own stats files · CrossInk-Bookorbit</footer>`;
+    tipOn($("#app")); scrollTo(0, 0);
+  };
+  addEventListener("hashchange", render); render();
+}).catch(() => ($("#app").innerHTML = `<p class="sub">No data yet. Upload from the reader to build it.</p>`));
+</script>
+</body>
+</html>

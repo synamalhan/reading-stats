@@ -1,0 +1,397 @@
+{
+ "books": {
+  "1984": {
+   "author": "George Orwel",
+   "finished": false,
+   "finished_on": null,
+   "id": "epub_16646509195710853181",
+   "pages": 3,
+   "seconds": 100,
+   "seconds_left": 0,
+   "sessions": 1,
+   "started": "2026-11-12",
+   "time_of_day": {
+    "Afternoon": 0,
+    "Evening": 0,
+    "Morning": 0,
+    "Night": 95
+   },
+   "title": "1984",
+   "weekday": {
+    "Fri": 0,
+    "Mon": 0,
+    "Sat": 0,
+    "Sun": 0,
+    "Thu": 100,
+    "Tue": 0,
+    "Wed": 0
+   }
+  },
+  "carmilla": {
+   "author": "J Sheridan le Fanu",
+   "finished": false,
+   "finished_on": null,
+   "id": "epub_12268809903462335018",
+   "pages": 0,
+   "seconds": 103,
+   "seconds_left": 0,
+   "sessions": 0,
+   "started": null,
+   "time_of_day": {
+    "Afternoon": 0,
+    "Evening": 0,
+    "Morning": 0,
+    "Night": 0
+   },
+   "title": "Carmilla",
+   "weekday": {
+    "Fri": 0,
+    "Mon": 0,
+    "Sat": 0,
+    "Sun": 0,
+    "Thu": 0,
+    "Tue": 0,
+    "Wed": 0
+   }
+  },
+  "circe": {
+   "author": "Madeline Miller",
+   "finished": false,
+   "finished_on": null,
+   "id": "epub_6305951288542968818",
+   "pages": 2,
+   "seconds": 3182,
+   "seconds_left": 0,
+   "sessions": 6,
+   "started": "2026-10-24",
+   "time_of_day": {
+    "Afternoon": 0,
+    "Evening": 80,
+    "Morning": 0,
+    "Night": 0
+   },
+   "title": "Circe",
+   "weekday": {
+    "Fri": 765,
+    "Mon": 0,
+    "Sat": 68,
+    "Sun": 5,
+    "Thu": 616,
+    "Tue": 1211,
+    "Wed": 518
+   }
+  },
+  "daisy darker": {
+   "author": "Alice Feeney",
+   "finished": true,
+   "finished_on": "2026-11-01",
+   "id": "epub_3605319634980639389",
+   "pages": 470,
+   "seconds": 18573,
+   "seconds_left": 0,
+   "sessions": 21,
+   "started": "2026-10-06",
+   "time_of_day": {
+    "Afternoon": 2039,
+    "Evening": 404,
+    "Morning": 10,
+    "Night": 6160
+   },
+   "title": "Daisy Darker",
+   "weekday": {
+    "Fri": 4575,
+    "Mon": 0,
+    "Sat": 2064,
+    "Sun": 5262,
+    "Thu": 1697,
+    "Tue": 2704,
+    "Wed": 2243
+   }
+  },
+  "delilah green doesn t care": {
+   "author": "Ashley Herring Blake",
+   "finished": false,
+   "finished_on": null,
+   "id": "epub_11858233575919101607",
+   "pages": 40,
+   "seconds": 1020,
+   "seconds_left": 0,
+   "sessions": 2,
+   "started": "2026-09-24",
+   "time_of_day": {
+    "Afternoon": 20,
+    "Evening": 0,
+    "Morning": 0,
+    "Night": 883
+   },
+   "title": "Delilah Green Doesn't Care",
+   "weekday": {
+    "Fri": 667,
+    "Mon": 0,
+    "Sat": 273,
+    "Sun": 0,
+    "Thu": 60,
+    "Tue": 0,
+    "Wed": 20
+   }
+  },
+  "imogen obviously": {
+   "author": "Becky Albertalli",
+   "finished": false,
+   "finished_on": null,
+   "id": "epub_17299403645707294416",
+   "pages": 0,
+   "seconds": 4993,
+   "seconds_left": 0,
+   "sessions": 6,
+   "started": "2026-11-12",
+   "time_of_day": {
+    "Afternoon": 0,
+    "Evening": 0,
+    "Morning": 0,
+    "Night": 0
+   },
+   "title": "Imogen, Obviously",
+   "weekday": {
+    "Fri": 1477,
+    "Mon": 0,
+    "Sat": 1213,
+    "Sun": 0,
+    "Thu": 2303,
+    "Tue": 0,
+    "Wed": 0
+   }
+  },
+  "she gets the girl": {
+   "author": "Rachael Lippincott",
+   "finished": true,
+   "finished_on": "2026-10-24",
+   "id": "epub_1816736449597356808",
+   "pages": 688,
+   "seconds": 16330,
+   "seconds_left": 0,
+   "sessions": 23,
+   "started": "2026-09-14",
+   "time_of_day": {
+    "Afternoon": 5190,
+    "Evening": 3059,
+    "Morning": 60,
+    "Night": 5688
+   },
+   "title": "She Gets the Girl",
+   "weekday": {
+    "Fri": 0,
+    "Mon": 9728,
+    "Sat": 12,
+    "Sun": 0,
+    "Thu": 0,
+    "Tue": 1759,
+    "Wed": 2510
+   }
+  },
+  "suicide notes": {
+   "author": "Michael Thomas Ford",
+   "finished": true,
+   "finished_on": "2026-10-30",
+   "id": "epub_12378881656403577581",
+   "pages": 516,
+   "seconds": 12051,
+   "seconds_left": 0,
+   "sessions": 23,
+   "started": "2026-09-16",
+   "time_of_day": {
+    "Afternoon": 2221,
+    "Evening": 2933,
+    "Morning": 1371,
+    "Night": 5315
+   },
+   "title": "Suicide Notes",
+   "weekday": {
+    "Fri": 741,
+    "Mon": 195,
+    "Sat": 3994,
+    "Sun": 0,
+    "Thu": 2442,
+    "Tue": 0,
+    "Wed": 4481
+   }
+  },
+  "the gifts of imperfection": {
+   "author": "Brené Brown",
+   "finished": false,
+   "finished_on": null,
+   "id": "epub_12534200741779931188",
+   "pages": 0,
+   "seconds": 712,
+   "seconds_left": 0,
+   "sessions": 1,
+   "started": "2026-11-12",
+   "time_of_day": {
+    "Afternoon": 0,
+    "Evening": 0,
+    "Morning": 0,
+    "Night": 0
+   },
+   "title": "The Gifts of Imperfection",
+   "weekday": {
+    "Fri": 519,
+    "Mon": 0,
+    "Sat": 0,
+    "Sun": 0,
+    "Thu": 193,
+    "Tue": 0,
+    "Wed": 0
+   }
+  },
+  "the ocean at the end of the lane": {
+   "author": "Neil Gaiman",
+   "finished": true,
+   "finished_on": "2026-10-24",
+   "id": "epub_8566123653656101490",
+   "pages": 464,
+   "seconds": 11465,
+   "seconds_left": 0,
+   "sessions": 15,
+   "started": "2026-09-19",
+   "time_of_day": {
+    "Afternoon": 3877,
+    "Evening": 2210,
+    "Morning": 120,
+    "Night": 5250
+   },
+   "title": "The Ocean at the End of the Lane",
+   "weekday": {
+    "Fri": 39,
+    "Mon": 3613,
+    "Sat": 688,
+    "Sun": 111,
+    "Thu": 3237,
+    "Tue": 228,
+    "Wed": 3549
+   }
+  },
+  "the silent patient": {
+   "author": "Alex Michaelides",
+   "finished": true,
+   "finished_on": "2026-10-31",
+   "id": "epub_9226168441167828705",
+   "pages": 0,
+   "seconds": 14775,
+   "seconds_left": 0,
+   "sessions": 0,
+   "started": "2026-10-31",
+   "time_of_day": {
+    "Afternoon": 0,
+    "Evening": 0,
+    "Morning": 0,
+    "Night": 0
+   },
+   "title": "The Silent Patient",
+   "weekday": {
+    "Fri": 0,
+    "Mon": 0,
+    "Sat": 9,
+    "Sun": 0,
+    "Thu": 0,
+    "Tue": 0,
+    "Wed": 0
+   }
+  },
+  "verity": {
+   "author": "Colleen Hoover",
+   "finished": true,
+   "finished_on": "2026-10-24",
+   "id": "epub_6502461387768303147",
+   "pages": 696,
+   "seconds": 14236,
+   "seconds_left": 0,
+   "sessions": 28,
+   "started": "2026-09-25",
+   "time_of_day": {
+    "Afternoon": 3523,
+    "Evening": 3885,
+    "Morning": 5322,
+    "Night": 1490
+   },
+   "title": "Verity",
+   "weekday": {
+    "Fri": 2436,
+    "Mon": 2437,
+    "Sat": 1694,
+    "Sun": 881,
+    "Thu": 3077,
+    "Tue": 844,
+    "Wed": 2867
+   }
+  }
+ },
+ "global_stats": {
+  "finished": 6,
+  "last_day": "2026-11-14",
+  "longest_streak": 27,
+  "pages": 3011,
+  "read_days": [
+   "2026-09-14",
+   "2026-09-15",
+   "2026-09-16",
+   "2026-09-17",
+   "2026-09-18",
+   "2026-09-19",
+   "2026-09-20",
+   "2026-09-21",
+   "2026-09-22",
+   "2026-09-23",
+   "2026-09-24",
+   "2026-09-25",
+   "2026-09-26",
+   "2026-09-27",
+   "2026-09-28",
+   "2026-09-29",
+   "2026-09-30",
+   "2026-10-01",
+   "2026-10-02",
+   "2026-10-03",
+   "2026-10-04",
+   "2026-10-05",
+   "2026-10-06",
+   "2026-10-07",
+   "2026-10-08",
+   "2026-10-09",
+   "2026-10-10",
+   "2026-10-15",
+   "2026-10-16",
+   "2026-10-20",
+   "2026-10-21",
+   "2026-10-24",
+   "2026-10-28",
+   "2026-10-30",
+   "2026-10-31",
+   "2026-11-01",
+   "2026-11-03",
+   "2026-11-04",
+   "2026-11-05",
+   "2026-11-06",
+   "2026-11-12",
+   "2026-11-13",
+   "2026-11-14"
+  ],
+  "seconds": 105904,
+  "sessions": 140,
+  "time_of_day": {
+   "Afternoon": 17505,
+   "Evening": 13527,
+   "Morning": 7168,
+   "Night": 26281
+  },
+  "weekday": {
+   "Fri": 11782,
+   "Mon": 17016,
+   "Sat": 10158,
+   "Sun": 6689,
+   "Thu": 14712,
+   "Tue": 6856,
+   "Wed": 16202
+  }
+ },
+ "taken_at": "2026-11-23T15:45:00-07:00"
+}
