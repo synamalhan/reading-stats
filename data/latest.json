@@ -32,13 +32,13 @@
    "finished": false,
    "finished_on": null,
    "id": "epub_15797068167646535106",
-   "pages": 69,
-   "seconds": 2051,
-   "seconds_left": 5372,
-   "sessions": 4,
+   "pages": 73,
+   "seconds": 2205,
+   "seconds_left": 5069,
+   "sessions": 5,
    "started": "2026-11-25",
    "time_of_day": {
-    "Afternoon": 0,
+    "Afternoon": 154,
     "Evening": 0,
     "Morning": 82,
     "Night": 1866
@@ -49,9 +49,36 @@
     "Mon": 0,
     "Sat": 0,
     "Sun": 0,
-    "Thu": 0,
+    "Thu": 154,
     "Tue": 0,
     "Wed": 1948
+   }
+  },
+  "chip war": {
+   "author": "Chris Miller",
+   "finished": false,
+   "finished_on": null,
+   "id": "epub_6153159256493173887",
+   "pages": 13,
+   "seconds": 223,
+   "seconds_left": 14004,
+   "sessions": 2,
+   "started": "2026-11-26",
+   "time_of_day": {
+    "Afternoon": 0,
+    "Evening": 0,
+    "Morning": 0,
+    "Night": 223
+   },
+   "title": "Chip War",
+   "weekday": {
+    "Fri": 0,
+    "Mon": 0,
+    "Sat": 0,
+    "Sun": 0,
+    "Thu": 223,
+    "Tue": 0,
+    "Wed": 0
    }
   },
   "circe": {
@@ -145,16 +172,16 @@
    "finished": false,
    "finished_on": null,
    "id": "epub_13959051737573765560",
-   "pages": 126,
-   "seconds": 7798,
-   "seconds_left": 14055,
-   "sessions": 14,
+   "pages": 154,
+   "seconds": 8264,
+   "seconds_left": 13124,
+   "sessions": 15,
    "started": "2026-11-12",
    "time_of_day": {
     "Afternoon": 0,
     "Evening": 1056,
     "Morning": 0,
-    "Night": 1749
+    "Night": 2215
    },
    "title": "Imogen, Obviously",
    "weekday": {
@@ -162,7 +189,7 @@
     "Mon": 2362,
     "Sat": 1213,
     "Sun": 0,
-    "Thu": 2303,
+    "Thu": 2769,
     "Tue": 443,
     "Wed": 0
    }
@@ -253,16 +280,16 @@
    "finished": false,
    "finished_on": null,
    "id": "epub_1885050718609949113",
-   "pages": 97,
-   "seconds": 4125,
-   "seconds_left": 20424,
-   "sessions": 6,
+   "pages": 187,
+   "seconds": 7129,
+   "seconds_left": 14715,
+   "sessions": 11,
    "started": "2026-11-24",
    "time_of_day": {
-    "Afternoon": 120,
-    "Evening": 901,
+    "Afternoon": 696,
+    "Evening": 1394,
     "Morning": 820,
-    "Night": 2284
+    "Night": 4219
    },
    "title": "The Hunger Games",
    "weekday": {
@@ -270,9 +297,9 @@
     "Mon": 0,
     "Sat": 0,
     "Sun": 0,
-    "Thu": 0,
+    "Thu": 1935,
     "Tue": 2457,
-    "Wed": 1668
+    "Wed": 2737
    }
   },
   "the ocean at the end of the lane": {
@@ -359,9 +386,9 @@
  },
  "global_stats": {
   "finished": 6,
-  "last_day": "2026-11-25",
+  "last_day": "2026-11-26",
   "longest_streak": 27,
-  "pages": 3304,
+  "pages": 3439,
   "read_days": [
    "2026-09-14",
    "2026-09-15",
@@ -408,25 +435,26 @@
    "2026-11-14",
    "2026-11-23",
    "2026-11-24",
-   "2026-11-25"
+   "2026-11-25",
+   "2026-11-26"
   ],
-  "seconds": 114804,
-  "sessions": 158,
+  "seconds": 118651,
+  "sessions": 167,
   "time_of_day": {
-   "Afternoon": 17647,
-   "Evening": 15484,
+   "Afternoon": 18377,
+   "Evening": 15977,
    "Morning": 8070,
-   "Night": 32180
+   "Night": 34804
   },
   "weekday": {
    "Fri": 11782,
    "Mon": 19400,
    "Sat": 10158,
    "Sun": 6689,
-   "Thu": 14712,
+   "Thu": 17490,
    "Tue": 9756,
-   "Wed": 19818
+   "Wed": 20887
   }
  },
- "taken_at": "2026-11-25T11:36:14.096763-07:00"
+ "taken_at": "2026-11-26T15:55:00-07:00"
 }
